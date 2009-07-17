@@ -1,9 +1,9 @@
-import datetime, timedelta
+import datetime
 from django.db import models
-from django.db.models i mport Count, F
+from django.db.models import Count, F
 from django.utils.translation import ugettext as _
 from django.contrib.contenttypes import generic
-from django.contrib.contenttypes.models import ContentTypes
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
 
 from slots import settings as slot_settings
@@ -115,11 +115,11 @@ class Slot(models.Model):
     Slot model
         The need to be able to position something somewhere.
     """
-    name = models.SlugField(_('Name (slug)'), 
+    name = models.SlugField(_('Name (slug)'), unique=True,
         help_text=_('Name of the slot, must only contain alpha numeric characters.'))
     is_static = models.BooleanField(_('Static'), default=True, 
         help_text=_('Defines if slot is static. ie: not generated dynamically.'))
-    count = models.PositiveIntegerField(_('Count'), default=1
+    count = models.PositiveIntegerField(_('Count'), default=1,
         help_text=_('The number of items to return when getting the slot content.'))
     eligible_types = models.ManyToManyField(ContentType, verbose_name=_('Eligible Types'), null=True, blank=True, 
         help_text=_('The types of content that this slot can contain. Select none for allowing all content types.'))
@@ -133,9 +133,6 @@ class Slot(models.Model):
     
     def __unicode__(self):
         return self.name
-        
-    class Meta:
-        unique_together = ('name', 'stype',)
         
         
 class SlotContentManager(models.Manager):
