@@ -62,7 +62,7 @@ def do_get_slot_content(parser, token):
     argv = token.contents.split()
     argc = len(argv)
     
-    if argc != 5 and argc != 6:
+    if argc != 4 and argc != 5:
         raise TemplateSyntaxError, "Tag %s takes three to four arguments." % argv[0]
     
     (slot, stype, varname, count) = (argv[1], argv[1], argv[4], None)
