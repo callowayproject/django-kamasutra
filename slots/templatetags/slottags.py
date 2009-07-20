@@ -6,15 +6,15 @@ from django.utils.translation import ugettext as _
 register = Library()
 
 class SlotContentNode(Node):
-    def __init__(self, slot, stype, varname, count=None):
-        (self.slot, self.stype, self.varname, self.count) = (slot, stype, varname, count)
+    def __init__(self, slot, varname, count=None):
+        (self.slot, self.varname, self.count) = (slot, varname, count)
         
     def render(self, context):
         try:
             slot = Variable(self.slot).resolve(context)
         except VariableDoesNotExist:
             try:
-                slot = Slot.objects.get(name__iexact=self.slot, stype=self.stype,)
+                slot = Slot.objects.get(name__iexact=self.slot)
             except:
                 return ""
 
@@ -54,8 +54,8 @@ class ApplicableSlotClassNode(Node):
         
 def do_get_slot_content(parser, token):
     """
-    {% get_slot_content slot type as content %}
-    {% get_slot_content slot slideshow as content count %}
+    {% get_slot_content slot as content %}
+    {% get_slot_content slot as content count %}
     
     Where slot is either a Slot instance (e.g. slot), or Slot name (e.g. home__cube).
     """
@@ -65,12 +65,12 @@ def do_get_slot_content(parser, token):
     if argc != 4 and argc != 5:
         raise TemplateSyntaxError, "Tag %s takes three to four arguments." % argv[0]
     
-    (slot, stype, varname, count) = (argv[1], argv[1], argv[4], None)
+    (slot, varname, count) = (argv[1], argv[3], None)
     
     if argc == 5:
         count = int(argv[5])
     
-    return SlotContentNode(slot, stype, varname, count)
+    return SlotContentNode(slot, varname, count)
 
 def do_get_applicable_slots(parser, token):
     """
