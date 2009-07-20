@@ -36,6 +36,21 @@ class ApplicableSlotsNode(Node):
         context[self.varname] = Slot.objects.get_applicable(obj)
         return ""  
         
+class ApplicableSlotClassNode(Node):
+    def __init__(self, obj, slot):
+        (self.obj, self.slot) = (obj, slot)
+    
+    def render(self, context):
+        try:
+            obj = Variable(self.obj).resolve(context)
+            slot = Variable(self.slot).resolve(context)
+        except VariableDoesNotExist:
+            return ""
+        
+        if Slot.objects.contains_object(slot, obj):
+            return "selected=\"true\""
+        return ""   
+        
         
 def do_get_slot_content(parser, token):
     """
@@ -69,6 +84,18 @@ def do_get_applicable_slots(parser, token):
 
     return ApplicableSlotsNode(argv[1], argv[3])
     
+def do_get_applicable_slot_class(parser, token):
+    """
+    {% get_applicable_slot_class object slot %}
+    """
+    argv = token.contents.split()
+    argc = len(argv)
+
+    if argc != 3:
+        raise template.TemplateSyntaxError, "Tag %s takes two argument." % argv[0]
+
+    return ApplicableSlotClassNode(argv[1], argv[2])
+    
 register.tag("get_slot_content", do_get_slot_content)
 register.tag("get_applicable_slots", do_get_applicable_slots)
-
+register.tag("get_applicable_slot_class", do_get_applicable_slot_class)

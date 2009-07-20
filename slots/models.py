@@ -5,6 +5,7 @@ from django.utils.translation import ugettext as _
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
+from django.core.cache import cache
 
 from slots import settings as slot_settings
 from slots import utils
@@ -16,7 +17,7 @@ class SlotManager(models.Manager):
         Add an object to a slot.
         """
         # check to make sure position is within the slot count
-        if not position in range(1, self.slot.count+1):
+        if not position in range(1, slot.count+1):
             position = 1
 
         ctype = ContentType.objects.get_for_model(obj)
@@ -25,7 +26,8 @@ class SlotManager(models.Manager):
         
         # Create the new SlotContent object, force uniquness.
         try:
-            SlotContent._default_manager.get(slot=slot, content_type=ctype, object_id=obj.id)
+            SlotContent._default_manager.get(slot__pk=slot.pk, 
+                content_type__pk=ctype.pk, object_id=str(obj.id))
             return False
         except SlotContent.DoesNotExist:
             new_obj = SlotContent._default_manager.create(slot=slot, content_type=ctype, 
@@ -44,7 +46,7 @@ class SlotManager(models.Manager):
         """
         ctype = ContentType.objects.get_for_model(obj)
         try:
-            item = SlotContent._default_manager.get(slot=slot, content_type=ctype, object_id=obj.pk)
+            item = SlotContent._default_manager.get(slot=slot, content_type=ctype, object_id=str(obj.pk))
         except SlotContent.DoesNotExist:
             return False
             
@@ -69,7 +71,7 @@ class SlotManager(models.Manager):
                 ex = 'custom'
             
         # Get the cache key.
-        key = utils.get_cache_key(slot, 'items', ex)
+        key = utils.get_cache_key(slot, ex)
         items = cache.get(key)
         if items:
             return items
@@ -87,6 +89,17 @@ class SlotManager(models.Manager):
         
         return items
             
+    def contains_object(self, slot, obj):
+        ctype = ContentType.objects.get_for_model(obj)
+        
+        try:
+            slot.slotcontent_set.get(content_type__pk=ctype.pk, object_id=str(obj.pk))
+        except SlotContent.DoesNotExist:
+            return False
+            
+        return True
+        
+        
     def get_applicable(self, obj):
         """
         Gets the slots that the object can be assigned.
@@ -104,7 +117,7 @@ class SlotManager(models.Manager):
         Check to make sure object can be assigned to a slot.
         """
         ctype = ContentType.objects.get_for_model(obj)
-        items = self.filter(slot=slot, eligible_types__in=[ctype,])
+        items = self.filter(pk=slot.pk, eligible_types__in=[ctype,])
         if items:
             return True
         return False
@@ -149,13 +162,12 @@ class SlotContentManager(models.Manager):
         """
         Trim the amount of items in the slot.
         """
-        items = self.filter(
-            slot=slot).annotate(
-                num_of_items=Count('pk')).filter(
-                    num_of_items__gt=F('slot__count') * slot_settings.CONTENT_OVERLAP_COUNT).order_by('order')
-            
-        items.delete()
-        self.rebuild_items(slot)
+        items = self.filter(slot=slot).order_by('order')
+        if len(items) > slot.count + slot_settings.CONTENT_OVERLAP_COUNT:
+            items = items[(slot.count + slot_settings.CONTENT_OVERLAP_COUNT):]
+            items.delete()
+
+        self.rebuild_cache(slot)
         
     def reorder(self, slot, new_or_old_content, is_new=True):
         """
