@@ -19,6 +19,7 @@ def get_admin_url(obj):
             obj._meta.module_name, obj.id)
  
 def add(request, slotname, type, id):
+    print slotname
     try:
         slot = Slot.objects.get(name__iexact=slotname)
     except Slot.DoesNotExist:
