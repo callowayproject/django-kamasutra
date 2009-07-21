@@ -1,6 +1,7 @@
 from django.db.models import get_model
 from django.template import Library, Node, TemplateSyntaxError, Variable, resolve_variable, VariableDoesNotExist
 from slots.models import Slot, SlotContent
+from slots import settings
 from django.utils.translation import ugettext as _
 
 register = Library()
@@ -52,6 +53,27 @@ class ApplicableSlotClassNode(Node):
         return ""   
         
         
+class PageSlotNode(Node):
+    def __init__(self, name, extra, varname):
+        self.name = name
+        self.extra = extra
+        self.varname = varname
+        
+    def render(self, context):
+        try:
+            self.name = Variable(self.name).resolve(context)
+        except VariableDoesNotExist, e:
+            pass
+        
+        s_name = '%s%s%s' % (self.name, settings.PAGE_SLOT_CONBINE_STRING, self.extra)
+        try:
+            slot = Slot.objects.get(name__iexact=s_name.lower())
+            context[self.varname] = slot
+        except Slot.DoesNotExist:
+            pass
+        return ""
+        
+        
 def do_get_slot_content(parser, token):
     """
     {% get_slot_content slot as content %}
@@ -96,6 +118,21 @@ def do_get_applicable_slot_class(parser, token):
 
     return ApplicableSlotClassNode(argv[1], argv[2])
     
+def do_get_page_slot(parser, token):
+    """
+    {% get_page_slot string string as slot %}
+    {% get_page_slot category.name headline as slot %}
+    """    
+    argv = token.contents.split()
+    argc = len(argv)
+
+    if argc != 5:
+        raise template.TemplateSyntaxError, "Tag %s takes 4 argument." % argv[0]
+
+    return PageSlotNode(argv[1], argv[2], argv[4])
+    
+    
 register.tag("get_slot_content", do_get_slot_content)
 register.tag("get_applicable_slots", do_get_applicable_slots)
 register.tag("get_applicable_slot_class", do_get_applicable_slot_class)
+register.tag("get_page_slot", do_get_page_slot)
