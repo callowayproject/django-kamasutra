@@ -12,22 +12,27 @@
 
 {% block content %}
 	<div style="border:0;">
-		<h1>{{ slot }}, shows {{ slot.count }} item{% ifnotequal slot.count 1 %}s{% endifnotequal %}.</h1>
-		<form action="." method="POST">
-			<div id="sortable">
-				{% for form in forms %}  
-					{{ form }}
-				{% endfor %}
-			</div>
-			<fieldset style="border:0;">
-				<button type="submit" class="button positive">
-					Save
-				</button>
-				<button type="submit" name="cancel" class="button positive">
-					Cancel	
-				</button>
-			</fieldset>
-		</form>
+		<h1>{{ slot }}, can show {{ slot.count }} item{% ifnotequal slot.count 1 %}s{% endifnotequal %}.</h1>
+		{% if forms %}
+			<form action="." method="POST">
+				<div id="sortable">
+			        {% for form in forms %}  
+			        	{{ form }}
+			        {% endfor %}
+				</div>
+				<fieldset style="border:0;">
+			        <button type="submit" class="button positive">
+			        	Save
+			        </button>
+			        <button type="submit" name="cancel" class="button positive">
+			        	Cancel	
+			        </button>
+				</fieldset>
+			
+			</form>
+		{% else %}
+			<strong>No content has been assigned to this slot.</strong>
+		{% endif %}
 	</div><br/>
 	<div style="padding:10px;background-color:#EFEFEF;">
 		<strong>Tip:</strong> Make sure you hit <strong>SAVE</strong> button after changing the order of the items. <br/>
