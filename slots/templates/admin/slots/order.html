@@ -1,0 +1,37 @@
+{% extends 'admin/base_site.html' %}
+
+{% load i18n admin_modify adminmedia %}
+
+{% block breadcrumbs %}{% if not is_popup %}
+<div class="breadcrumbs">
+     <a href="/admin/">{% trans "Home" %}</a> &rsaquo;
+     <a href="/admin/slots/">Slots</a> &rsaquo; 
+	 <a href="/admin/slots/slot/">Slots</a>
+</div>
+{% endif %}{% endblock %}
+
+{% block content %}
+	<div style="border:0;">
+		<h1>{{ slot }}, shows {{ slot.count }} item{% ifnotequal slot.count 1 %}s{% endifnotequal %}.</h1>
+		<form action="." method="POST">
+			<div id="sortable">
+				{% for form in forms %}  
+					{{ form }}
+				{% endfor %}
+			</div>
+			<fieldset style="border:0;">
+				<button type="submit" class="button positive">
+					Save
+				</button>
+				<button type="submit" name="cancel" class="button positive">
+					Cancel	
+				</button>
+			</fieldset>
+		</form>
+	</div><br/>
+	<div style="padding:10px;background-color:#EFEFEF;">
+		<strong>Tip:</strong> Make sure you hit <strong>SAVE</strong> button after changing the order of the items. <br/>
+		<strong>Tip:</strong> If the items do not look like they where ordered correctly after saving, 
+		try <a href=""><strong>clicking here</strong></a>. 
+	</div>
+{% endblock %}
