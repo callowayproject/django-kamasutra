@@ -1,0 +1,77 @@
+{% extends 'admin/base_site.html' %}
+
+{% load i18n admin_modify adminmedia %}
+
+{% block breadcrumbs %}{% if not is_popup %}
+<div class="breadcrumbs">
+     <a href="/admin/">{% trans "Home" %}</a> &rsaquo;
+     <a href="/admin/slots/">Slots</a> &rsaquo; 
+	 <a href="/admin/slots/slot/">Slots</a>
+</div>
+{% endif %}{% endblock %}
+
+{% block cols %}
+	13
+{% endblock %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+	<div class="grid_13">
+		<div class="module">
+			<style>
+				#sortable{margin:10px; list-style:none;}
+				#sortable li{ padding:5px 10px; border:1px solid #ABABAB; margin:5px 0; background:#EEE;}
+				/*#sortable div input{visibility:hidden;}*/
+				#sortable li input{float:right;}
+				#change_pending{padding:10px;background-color:#FFF47F;font-weight:bold; margin-top:4px;}
+				.slot_order{font-size:18px;font-weight:bold;width:45px;}
+			</style>
+			<script type="text/javascript">
+				$(function() {
+					$('#change_pending').hide();
+					$("#sortable").sortable({
+						items: "li",
+						update: function(event, ui){
+							var i = 0;
+							var j = 1;
+							$(".slot_order").each(function(){
+								$(this).text(j);
+								j++;
+							});
+							$("li > input").each(function(){
+								$(this).val(i);
+								i++;
+								$('#change_pending').show();
+							});
+						}
+					});
+				});
+			</script>
+			<div style="border:0;">
+				<div class="inner"><h1>{{ slot }}, shows {{ slot.count }} item{% ifnotequal slot.count 1 %}s{% endifnotequal %}.</h1>
+				* drag and drop the items to change the order of which they appear.
+				<div id="change_pending">
+					You have made a change that has not been saved yet. <a href="">cancel</a>
+				</div></div>
+				<form action="." method="POST">
+					<ul id="sortable">
+						{% for form in forms %}  
+							{{ form.as_ul }}
+						{% endfor %}
+					</ul>
+					
+					<div class="submit-row" {% if is_popup %}style="overflow: auto;"{% endif %}>
+						<input type="submit" value="{% trans 'Save' %}" class="default" name="_save"/>
+						<INPUT type='button' onclick='history.go(-1)' value='{% trans "Cancel" %}' id='cancel' name='cancel' />
+					</div>
+				</form>
+			</div>
+			<div style="padding:10px;background-color:#EFEFEF;">
+				<strong>Tip:</strong> Make sure you hit <strong>SAVE</strong> button after changing the order of the items. <br/>
+				<strong>Tip:</strong> If the items do not look like they where ordered correctly after saving, 
+				try <a href=""><strong>clicking here</strong></a>. 
+			</div>
+		</div>
+	</div>
+{% endblock %}
