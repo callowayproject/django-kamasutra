@@ -144,6 +144,9 @@ class Slot(models.Model):
     
     objects = SlotManager()
     
+    class Meta:
+        ordering = ['name']
+    
     def __unicode__(self):
         return self.name
         
@@ -202,6 +205,9 @@ class SlotContent(models.Model):
     add_date = models.DateTimeField(_('Date Added'), default=datetime.datetime.now)
     
     objects = SlotContentManager()
+    
+    class Meta:
+        ordering = ['slot__name', 'order', '-add_date']
     
     def __unicode__(self):
         return '%s - %s' % (self.slot.name, self.content_object)
