@@ -23,28 +23,58 @@
 				#sortable{margin:10px; list-style:none;}
 				#sortable li{ padding:5px 10px; border:1px solid #ABABAB; margin:5px 0; background:#EEE;}
 				/*#sortable div input{visibility:hidden;}*/
-				#sortable li input{float:right;}
+				#sortable li input{float:right; visibility:hidden; }
 				#change_pending{padding:10px;background-color:#FFF47F;font-weight:bold; margin-top:4px;}
 				.slot_order{font-size:18px;font-weight:bold;width:45px;}
+				.del{float:right; font-size:11px; color:#666; margin:5px 0; cursor:pointer;}
+				#sortable li.flagged{background:#ffeeff; color:#aa0000;}
 			</style>
 			<script type="text/javascript">
+				function init(){
+					$('.deletelink').click(function(){
+						$(this).parent().addClass('flagged');
+						$(this).parent().insertAfter($(this).parent().siblings());
+						$(this).addClass('addlink');
+						$(this).removeClass('deletelink');
+						$('#change_pending').show();
+						init();
+					});
+					$('.addlink').click(function(){
+						$(this).parent().removeClass('flagged');
+						$(this).addClass('deletelink');
+						$(this).removeClass('addlink');
+						$('#change_pending').show();
+						init();
+					});
+					var i = 0;
+					var j = 1;
+					$(".slot_order").each(function(){
+						if(!$(this).parent().parent().hasClass('flagged')){
+							$(this).text(j);
+							j++;
+						} else {
+							$(this).text("Flagged for Deletion");
+						}
+					});
+					$("li > input").each(function(){
+						if(!$(this).parent().hasClass('flagged')) {
+							$(this).val(i);
+							i++;
+						} else {
+							$(this).val("-1");
+						}
+						$('#change_pending').show();
+					});
+				}
 				$(function() {
 					$('#change_pending').hide();
+					$('#sortable > li').each(function(){
+						$(this).prepend('<div class="del deletelink">&nbsp;</div>');
+					});
+					init();
 					$("#sortable").sortable({
 						items: "li",
-						update: function(event, ui){
-							var i = 0;
-							var j = 1;
-							$(".slot_order").each(function(){
-								$(this).text(j);
-								j++;
-							});
-							$("li > input").each(function(){
-								$(this).val(i);
-								i++;
-								$('#change_pending').show();
-							});
-						}
+						update: init
 					});
 				});
 			</script>
