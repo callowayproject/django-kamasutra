@@ -33,7 +33,6 @@
 				function init(){
 					$('.deletelink').click(function(){
 						$(this).parent().addClass('flagged');
-						$(this).parent().insertAfter($(this).parent().siblings());
 						$(this).addClass('addlink');
 						$(this).removeClass('deletelink');
 						$('#change_pending').show();
