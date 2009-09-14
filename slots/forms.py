@@ -8,12 +8,12 @@ class SlotContentOrderForm(forms.ModelForm):
     class Meta:
         model = SlotContent
         fields = ('order',)
-    
-    def save(self, commit=True):
-        if self.instance.pk is not None and self.instance.order == -1:
-            self.instance.delete()
-            return
-        try:
-            super(SlotContentOrderForm, self).save(commit)
-        except psycopg2.IntegrityError:
-            self.instance.delete()
+    # 
+    # def save(self, commit=True):
+    #     if self.instance.pk is not None and self.instance.order == -1:
+    #         self.instance.delete()
+    #         return
+    #     try:
+    #         super(SlotContentOrderForm, self).save(commit)
+    #     except psycopg2.IntegrityError:
+    #         self.instance.delete()

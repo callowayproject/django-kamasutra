@@ -74,7 +74,10 @@ def order_content(request, slot_id, template_name='admin/slots/order.html'):
             form = SlotContentOrderForm(request.POST, instance=content, prefix=str(content.pk))
             forms.append(form)
             if form.is_valid():
-                form.save()
+                if form.instance.order >= 0:
+                    form.save()
+                else:
+                    form.instance.delete()
             
         return HttpResponseRedirect('.')       
     else:
