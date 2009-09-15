@@ -168,7 +168,8 @@ class SlotContentManager(models.Manager):
         items = self.filter(slot=slot).order_by('order')
         if len(items) > slot.count + slot_settings.CONTENT_OVERLAP_COUNT:
             items = items[(slot.count + slot_settings.CONTENT_OVERLAP_COUNT):]
-            items.delete()
+            for item in items:
+                item.delete()
 
         self.rebuild_cache(slot)
         
