@@ -41,6 +41,7 @@ def remove(request, slotname, type, id):
     Resolves the object by the specified content type and id, and removes it
     from the specified Slot if it has already been added.
     """
+    next = request.GET.get('next', '')
     try:
         slot = Slot.objects.get(name__iexact=slotname)
     except Slot.DoesNotExist:
@@ -54,7 +55,10 @@ def remove(request, slotname, type, id):
     
     Slot.objects.remove_object(slot=slot, obj=obj)
     
-    return HttpResponseRedirect(get_admin_url(obj))
+    if not next:
+        next = get_admin_url(obj)
+        
+    return HttpResponseRedirect(next)
 
 remove = staff_member_required(remove)
 
