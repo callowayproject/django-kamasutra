@@ -1,0 +1,34 @@
+{{ text1.firstname }} {{ text1.lastname }} favorite color is {{ text1.favorite_color }}<br/>
+
+Category 1 is {{ cat1.name }}<br/>
+
+Category 2 is {{ cat2.name }}<br/>
+
+{% load position_tags %}
+
+{# {% get_position my_test_position as pos %} #}
+{% get_position cat1.name as pos slugify=True %}
+{# {% get_position cat1.name top_articles as pos slugify=True %} #}
+{# {% get_position cat1.name as pos slugify=True %} #}
+
+<h2>{{ pos.name  }}</h2>
+{% get_position_content pos as pos_content1 %}
+{% get_position_content pos as pos_content2 limit=5 as_contenttype=False  %}
+<ul>
+    {% for c in pos_content1 %}
+        <li>{{ c.firstname }} favorite color is {{ c.favorite_color }}</li>
+    {% endfor %}
+</ul>
+<hr/>
+<ul>
+    {% for c in pos_content2 %}
+        <li>{{ c.content_object.firstname }} favorite color is {{ c.content_object.favorite_color }}</li>
+    {% endfor %}
+</ul>
+
+
+{% get_applicable_positions text1 as pos_list %}
+{{ text1 }} can be in the following positions<br/>
+{% for pos in pos_list %}
+    {{ pos }}<br/>
+{% endfor %}
