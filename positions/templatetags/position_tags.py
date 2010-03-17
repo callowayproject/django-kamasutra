@@ -2,6 +2,7 @@ from django.db.models import get_model
 from django.template import Library, Node, TemplateSyntaxError, Variable, resolve_variable, VariableDoesNotExist
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
+from django.contrib.contenttypes.models import ContentType
 
 from positions.models import Position, PositionContent
 from positions import settings as position_settings
@@ -63,12 +64,16 @@ class PositionContentNode(Node):
 
 
 class ApplicablePositionsNode(Node):
-    def __init__(self, obj, varname):
-        (self.obj, self.varname) = (obj, varname)
+     def __init__(self, obj=None, content_type_id=None, object_id=None, varname=None, return_all=False):
+        (self.obj, self.varname, self.return_all) = (obj, varname, return_all)
+        (self.content_type_id, self.object_id) = (content_type_id, object_id)
         if position_settings.TEMPLATETAG_DEBUG:
             print '****ApplicablePositionNode****'
             print '****__init__****'
             print 'obj: %s' % self.obj
+            print 'content_type_id: %s' % self.content_type_id
+            print 'object_id: %s' % self.object_id
+            print 'return_all: %s' % self.return_all
             print 'varname: %s' % self.varname
     
     def render(self, context):
@@ -81,12 +86,30 @@ class ApplicablePositionsNode(Node):
             obj = Variable(self.obj).resolve(context)
         except VariableDoesNotExist:
             pass
+            
+        try:
+            content_type_id = Variable(self.content_type_id).resolve(context)
+        except:
+            pass
+
+        try:
+            object_id = Variable(self.object_id).resolve(context)
+        except:
+            pass
+            
+        if not obj:
+            try:
+                ctype = ContentType.objects.get(pk=str(content_type_id))
+                obj = ctype.get_object_for_this_type(pk=str(object_id))
+            except:
+                pass
+
+
         
         context[self.varname] = []
         try:
-            context[self.varname] = Position.objects.get_applicable(obj)
-        except Exception, e:
-            print e
+            context[self.varname] = Position.objects.get_applicable(obj, self.return_all)
+        except:
             pass
             
         if position_settings.TEMPLATETAG_DEBUG:
@@ -94,6 +117,55 @@ class ApplicablePositionsNode(Node):
             print 'Value for varname: %s' % context[self.varname]
         
         return ""  
+        
+
+class ContentPositionsNode(Node):
+    def __init__(self, obj=None, content_type_id=None, object_id=None, varname=None):
+        (self.obj, self.varname) = (obj, varname)
+        (self.content_type_id, self.object_id) = (content_type_id, object_id)
+        if position_settings.TEMPLATETAG_DEBUG:
+            print '****ContentPositionsNode****'
+            print '****__init__****'
+            print 'obj: %s' % self.obj
+            print 'varname: %s' % self.varname
+            print 'content_type_id: %s' % self.content_type_id
+            print 'object_id: %s' % self.object_id
+    
+    def render(self, context):
+        if position_settings.TEMPLATETAG_DEBUG:
+            print '****ContentPositionsNode****'
+            print '****render****'
+            
+        obj = None
+        try:
+            obj = Variable(self.obj).resolve(context)
+        except:
+            pass
+        
+        try:
+            content_type_id = Variable(self.content_type_id).resolve(context)
+        except:
+            pass
+            
+        try:
+            object_id = Variable(self.object_id).resolve(context)
+        except:
+            pass
+            
+        if not obj:
+            try:
+                ctype = ContentType.objects.get(pk=str(content_type_id))
+                obj = ctype.get_object_for_this_type(pk=str(object_id))
+            except:
+                pass
+        
+        context[self.varname] = Position.objects.positions_for_object(obj)
+            
+        if position_settings.TEMPLATETAG_DEBUG:
+            print 'Value for obj: %s' % obj
+            print 'Value for varname: %s' % context[self.varname]
+        
+        return "" 
         
         
 class PositionNode(Node):
@@ -166,7 +238,7 @@ def do_get_position_content(parser, token):
         raise TemplateSyntaxError, "Tag %s takes at least 3 arguments." % argv[0]
     
     if argv[2] != 'as':
-        raise template.TemplateSyntaxError, "Tag %s must have 'as' as the second argument." % argv[0]
+        raise TemplateSyntaxError, "Tag %s must have 'as' as the second argument." % argv[0]
         
     (position, varname) = (argv[1], argv[3])
     
@@ -178,16 +250,57 @@ def do_get_position_content(parser, token):
     return PositionContentNode(position, varname, **kwargs)
 
 def do_get_applicable_positions(parser, token):
-    """
-    {% get_applicable_positions object as positions %}
+     """
+    {% get_applicable_positions object as positions [all] %}
+    
+    or for the admin..
+    
+    {% get_applicable_positions content_type_id object_id as positions [all] %}
+    
+    all is optional and will return all, if it is not speficied only positions
+    that the current object is not contained in will be returned
     """
     argv = token.contents.split()
     argc = len(argv)
 
-    if argc != 4:
-        raise template.TemplateSyntaxError, "Tag %s takes three arguments." % argv[0]
+    if argc > 6:
+        raise TemplateSyntaxError, "Tag %s takes three, four or five arguments." % argv[0]
 
-    return ApplicablePositionsNode(argv[1], argv[3])
+    return_all = False
+    if argv[2] == "as":
+        if argc == 5 and argv[4] == 'all':
+            return_all = True
+        return ApplicablePositionsNode(obj=argv[1], varname=argv[3], 
+            return_all=return_all)
+    elif argv[3] == "as":
+        if argc == 6 and argv[5] == 'all':
+            return_all = True
+        return ApplicablePositionsNode(content_type_id=argv[1], 
+            object_id=argv[2], varname=argv[4], return_all=return_all)
+    else:
+        raise TemplateSyntaxError, 'Second or Third argument must be "as"'
+    
+def do_get_content_positions(parser, token):
+    """
+    {% get_content_positions object as positions %}
+    
+    or for the admin..
+    
+    {% get_content_positions content_type_id object_id as positions %}
+     """
+     argv = token.contents.split()
+     argc = len(argv)
+ 
+    if argc != 4 and argc != 5:
+        raise TemplateSyntaxError, "Tag %s takes three or four arguments." % ar
+ 
+    if argv[2] == "as":
+        return ContentPositionsNode(obj=argv[1], varname=argv[3])
+    elif argv[3] == "as":
+        return ContentPositionsNode(content_type_id=argv[1], 
+            object_id=argv[2], varname=argv[4])
+    else:
+        raise TemplateSyntaxError, 'Second or Third argument must be "as"'
     
 def do_get_position(parser, token):
     """
@@ -198,10 +311,10 @@ def do_get_position(parser, token):
     argc = len(argv)
 
     if argc < 4:
-        raise template.TemplateSyntaxError, "Tag %s takes at least 3 argument." % argv[0]
+        raise TemplateSyntaxError, "Tag %s takes at least 3 argument." % argv[0]
         
     if argv[2] != 'as' and argv[3] != 'as':
-        raise template.TemplateSyntaxError, "Tag %s must have 'as' as the second or third argument." % argv[0]
+        raise TemplateSyntaxError, "Tag %s must have 'as' as the second or third argument." % argv[0]
         
     name, prefix, varname, startpos = '', '', '', 0
     if argv[2] == 'as':
@@ -223,5 +336,6 @@ def do_get_position(parser, token):
     
     
 register.tag("get_position_content", do_get_position_content)
+register.tag("get_content_positions", do_get_content_positions)
 register.tag("get_applicable_positions", do_get_applicable_positions)
 register.tag("get_position", do_get_position)
