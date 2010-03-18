@@ -125,18 +125,14 @@ class PositionManager(models.Manager):
         Gets the positions that the object can be assigned.
         """
         ctype = ContentType.objects.get_for_model(obj)
-        
         if return_all:
-            positions = self.filter(Q(eligible_types__in=[ctype,]) | Q(allow_allow_all_types=True))
-        
+            positions = self.filter(
+                Q(eligible_types__in=[ctype,]) | Q(allow_all_types=True))
         else:
-            positions = self.filter(Q(eligible_types__in=[ctype,]) | Q(allow_allow_all_types=True)).exclude(
-                positioncontent__content_type=ctype, positioncontent__object_id=obj.pk)
-                
-        # If no position found with eligible_type of supplied obj, then
-        # check for position that allow all types.
-        if not positions:
-            positions = self.filter(allow_all_types=True)
+            positions = self.filter(
+                Q(eligible_types__in=[ctype,]) | Q(allow_all_types=True)).exclude(
+                    positioncontent__content_type=ctype, positioncontent__object_id=obj.pk)
+                    
         return positions
         
     def is_applicable(self, position, obj):
