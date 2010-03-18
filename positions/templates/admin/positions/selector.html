@@ -1,0 +1,31 @@
+{% load position_tags %}
+{% get_applicable_positions content_type_id object_id as app_positions %}
+<script type="text/javascript">
+    $(function() {
+        var availableTags = [{% for position in app_positions %}"{{ position.name }}",{% endfor %}];
+        $("#selector").autocomplete({
+    		source: availableTags,
+    		minLength: 2,
+    		select: function(event, ui) {
+    		    $.get("/position_management/add/{{ content_type_id }}/{{ object_id }}/");
+                $('<div class="position-admin-widget-item">'+ui.item.value+'</div>').appendTo("#position-admin-widget-items");
+    		}
+    	});
+	});
+</script>
+
+<div id="position-admin-widget">
+    <div id="position-admin-widget-input">
+        <label for="selector">Positions: </label>
+        <input id="selector" />
+    </div>
+    <div id="position-admin-widget-items">
+        {% for position in app_positions %}
+            <div class="position-admin-widget-item">
+                {{ position.name }}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+    
