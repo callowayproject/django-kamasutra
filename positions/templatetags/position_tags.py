@@ -64,7 +64,7 @@ class PositionContentNode(Node):
 
 
 class ApplicablePositionsNode(Node):
-     def __init__(self, obj=None, content_type_id=None, object_id=None, varname=None, return_all=False):
+    def __init__(self, obj=None, content_type_id=None, object_id=None, varname=None, return_all=False):
         (self.obj, self.varname, self.return_all) = (obj, varname, return_all)
         (self.content_type_id, self.object_id) = (content_type_id, object_id)
         if position_settings.TEMPLATETAG_DEBUG:
@@ -84,7 +84,7 @@ class ApplicablePositionsNode(Node):
         obj = None
         try:
             obj = Variable(self.obj).resolve(context)
-        except VariableDoesNotExist:
+        except:
             pass
             
         try:
@@ -104,8 +104,6 @@ class ApplicablePositionsNode(Node):
             except:
                 pass
 
-
-        
         context[self.varname] = []
         try:
             context[self.varname] = Position.objects.get_applicable(obj, self.return_all)
@@ -250,7 +248,7 @@ def do_get_position_content(parser, token):
     return PositionContentNode(position, varname, **kwargs)
 
 def do_get_applicable_positions(parser, token):
-     """
+    """
     {% get_applicable_positions object as positions [all] %}
     
     or for the admin..
@@ -287,9 +285,9 @@ def do_get_content_positions(parser, token):
     or for the admin..
     
     {% get_content_positions content_type_id object_id as positions %}
-     """
-     argv = token.contents.split()
-     argc = len(argv)
+    """
+    argv = token.contents.split()
+    argc = len(argv)
  
     if argc != 4 and argc != 5:
         raise TemplateSyntaxError, "Tag %s takes three or four arguments." % ar
