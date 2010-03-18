@@ -1,5 +1,6 @@
 {% load position_tags %}
 {% get_applicable_positions content_type_id object_id as app_positions %}
+{% get_content_positions content_type_id object_id as selected_positions %}
 <script type="text/javascript">
     $(function() {
         var availableTags = [{% for position in app_positions %}"{{ position.name }}",{% endfor %}];
@@ -7,10 +8,20 @@
     		source: availableTags,
     		minLength: 2,
     		select: function(event, ui) {
-    		    $.get("/position_management/add/{{ content_type_id }}/{{ object_id }}/");
-                $('<div class="position-admin-widget-item">'+ui.item.value+'</div>').appendTo("#position-admin-widget-items");
+    		    $.get("/position_management/add/"+ ui.item.value +"/{{ content_type_id }}/{{ object_id }}/");
+                $('<li><span class="deletelink" id=pos_"'+ui.item.value+'">&nbsp;</span>'+ui.item.value+'</li>').appendTo("#position-admin-widget-items");
+				$("#position-admin-widget-items li .deletelink").bind('click',function(){
+					$.get($(this).attr('rel'));
+					$(this).parent().remove();
+				});
     		}
     	});
+		$("#position-admin-widget-items li .deletelink").bind('click',function(){
+			var id = $(this).attr('id');
+			var pos = id.replace('pos_','');
+			$.get('/position_management/remove/'+pos+'/{{ content_type_id }}/{{ object_id }}/');
+			$(this).parent().remove();
+		});
 	});
 </script>
 
@@ -19,13 +30,11 @@
         <label for="selector">Positions: </label>
         <input id="selector" />
     </div>
-    <div id="position-admin-widget-items">
-        {% for position in app_positions %}
-            <div class="position-admin-widget-item">
-                {{ position.name }}
-            </div>
-        {% endfor %}
-    </div>
+    <ul id="position-admin-widget-items">
+    	{% for position in selected_positions %}
+    		<li><span class="deletelink" id="pos_{{ position.name}}">&nbsp;</span>{{ position.name }}</li>
+    	{% endfor %}
+    </ul>
 </div>
 
     
