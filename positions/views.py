@@ -66,9 +66,6 @@ def remove(request, position_name, type, id):
         
     c = ContentType.objects.get(id=type)
     obj = c.get_object_for_this_type(id=id)
-
-    if position not in Position.objects.get_applicable(obj):
-        return HttpResponseForbidden("The object cannot be added to this position.")
     
     Position.objects.remove_object(position=position, obj=obj)
     
