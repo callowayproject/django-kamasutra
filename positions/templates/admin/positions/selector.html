@@ -10,16 +10,15 @@
     		//source: availableTags,
     		minLength: 2,
     		select: function(event, ui) {
-    		    $.get("/position_management/add/"+ ui.item.value +"/{{ content_type_id }}/{{ object_id }}/");
-                $('<li><span class="deletelink" id=pos_"'+ui.item.value+'">&nbsp;</span>'+ui.item.value+'</li>').appendTo("#position-admin-widget-items");
-				$("#position-admin-widget-items li .deletelink").bind('click',function(){
-					var answer = confirm('Are you sure you want to remove this?');
-                    if(answer){
-    					$.get($(this).attr('rel'));
-    					$(this).parent().fadeOut("250").remove();
-                    }
-				});
-    		}
+    		    $.get("/position_management/add/"+ ui.item.value +"/{{ content_type_id }}/{{ object_id }}/",function(){
+					$('<li><span class="deletelink" id=pos_"'+ui.item.value+'">&nbsp;</span>'+ui.item.value+'</li>').appendTo("#position-admin-widget-items");
+					$("#position-admin-widget-items li .deletelink").bind('click',function(){
+						$.get($(this).attr('rel'));
+						$(this).parent().remove();
+					});
+	$("#selector").focus().val('');
+});
+   		}
     	});
     	
     	$("#selector").focus(function(){
