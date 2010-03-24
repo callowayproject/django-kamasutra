@@ -7,6 +7,8 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.safestring import mark_safe
 
+import simplejson
+
 from positions.models import Position, PositionContent
 from positions.forms import PositionContentOrderForm
 from positions import settings as position_settings
@@ -19,6 +21,20 @@ def get_admin_url(obj):
     """
     return "/%s/%s/%s/%s" % (position_settings.ADMIN_URL, obj._meta.app_label,
             obj._meta.module_name, obj.id)
+ 
+
+def widget_data(request, content_type_id, object_id):
+    c = ContentType.objects.get(id=content_type_id)
+    obj = c.get_object_for_this_type(id=object_id)
+    
+    positions = Position.objects.get_applicable(obj)
+    
+    
+    data = [pos.name for pos in positions]
+    
+    return HttpResponse(simplejson.dumps(data),
+                                    mimetype='application/json')
+    
  
 def add(request, position_name, type, id):
     try:
@@ -50,9 +66,6 @@ def remove(request, position_name, type, id):
         
     c = ContentType.objects.get(id=type)
     obj = c.get_object_for_this_type(id=id)
-
-    if position not in Position.objects.get_applicable(obj):
-        return HttpResponseForbidden("The object cannot be added to this position.")
     
     Position.objects.remove_object(position=position, obj=obj)
     
