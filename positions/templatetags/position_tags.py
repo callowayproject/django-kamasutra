@@ -221,6 +221,42 @@ class PositionNode(Node):
                         
         return ""
         
+
+class RenderPositionContentNode(Node):
+    def __init__(self, pc, template=None, suffix=None):
+        self.pc = pc
+        self.template = template
+        self.suffix = suffix
+        
+        if position_settings.TEMPLATETAG_DEBUG:
+            print '****RenderPositionContentNode****'
+            print '****__init__****'
+            print 'pc: %s' % self.pc
+            print 'template: %s' % self.template
+            print 'suffix: %s' % self.suffix
+        
+    def render(self, context):
+        if position_settings.TEMPLATETAG_DEBUG:
+            print '****RenderPositionContentNode****'
+            print '****render****'
+        
+        try:
+            pc = Variable(self.pc).resolve(context)
+            if not isinstance(pc, PositionContent):
+                return None
+        except:
+            if position_settings.TEMPLATETAG_DEBUG:
+                print 'pc is undefined.'
+            return None
+            
+        tpl = pc.render(template=self.template, suffix=self.suffix)
+    
+        if position_settings.TEMPLATETAG_DEBUG:
+            print 'Value for pc: %s' % pc
+            print 'Value for tpl: %s' % tpl
+                        
+        return tpl
+        
         
 def do_get_position_content(parser, token):
     """
@@ -332,12 +368,38 @@ def do_get_position(parser, token):
     
     return PositionNode(prefix, name, varname, **kwargs)
     
-def render_position_content(position_content, template=None):
-    if isinstance(position_content, PositionContent):
-        return position_content.render(template=template)
+def do_render_position_content(parser, token):
+    """
+    {% render_position_content [PositionContent] [with] [suffix=S] [template=T] %}
+    {% render_position_content pc %}
+    {% render_position_content pc with suffix=custom %}
+    {% render_position_content pc with template=mycustomtemplates/positions/custom.html %}
+    
+    Only suffix OR template can be specified, but not both.
+    """
+    argv = token.contents.split()
+    argc = len(argv)
+    
+    if argc < 2 or argc > 4:
+        raise TemplateSyntaxError, "Tag %s takes either two or four arguments." % argv[0]
+        
+    if argc == 2:
+        return RenderPositionContentNode(argv[1])
+    else:
+        if argv[2] != 'with':
+            raise TemplateSyntaxError, 'Second argument must be "with" for tag %s.' % argv[0]
+        extra = argv[3].split('=')
+        if len(extra) != 2:
+            raise TemplateSyntaxError, "Last argument must be formated correctly for tag %s." % argv[0]
+        if not extra[0] in ['suffix', 'template']:
+            raise TemplateSyntaxError, "Last argment must of either suffix or template for tag %s." % argv[0]
+            
+        kwargs = {extra[0]: extra[1],}
+        return RenderPositionContentNode(argv[1], **kwargs)
+    
     
 register.tag("get_position_content", do_get_position_content)
 register.tag("get_content_positions", do_get_content_positions)
 register.tag("get_applicable_positions", do_get_applicable_positions)
 register.tag("get_position", do_get_position)
-register.simple_tag(render_position_content)
+register.tag("render_position_content", do_render_position_content)
