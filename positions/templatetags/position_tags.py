@@ -332,8 +332,12 @@ def do_get_position(parser, token):
     
     return PositionNode(prefix, name, varname, **kwargs)
     
+def render_position_content(position_content, template=None):
+    if isinstance(position_content, PositionContent):
+        return position_content.render(template=template)
     
 register.tag("get_position_content", do_get_position_content)
 register.tag("get_content_positions", do_get_content_positions)
 register.tag("get_applicable_positions", do_get_applicable_positions)
 register.tag("get_position", do_get_position)
+register.simple_tag(render_position_content)

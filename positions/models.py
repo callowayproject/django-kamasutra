@@ -6,6 +6,7 @@ from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
 from django.core.cache import cache
+from django.template.loader import get_template, render_to_string
 
 from positions import settings as position_settings
 from positions import utils
@@ -60,7 +61,6 @@ class PositionManager(models.Manager):
         """
         Gets the content for the position given.
         """
-        print as_contenttype
         if not isinstance(position, Position):
             return []
         
@@ -228,6 +228,42 @@ class PositionContent(models.Model):
     
     class Meta:
         ordering = ['position__name', 'order', '-add_date']
+    
+    def render(self, template=None):
+        t, model, app = None, "", ""
+    
+        model = self.content_type.model.lower()
+        app = self.content_type.app_label.lower()
+    
+        try:
+            # Retreive the template passed in
+            t = get_template(template)
+        except:
+            try:
+                # Make a key based off of associated content object
+                key = '%s.%s' % (app, model)
+                # Retreive the template from the settings
+                t = get_template(position_settings.TEMPLATES.get(key, ""))
+            except:
+                try:
+                    # Retrieve the template based of off the content object
+                    t = get_template('positions/render/%s__%s.html' % (model, app))    
+                except:
+                    try:
+                        # Last resort, get template default
+                        t = get_template('positions/render/default.html')
+                    except:
+                        pass
+            
+        if not t: return None
+        
+        # The conext that will be passed to the rendered template.
+        context = {'obj': self.content_object, 'content': self}
+        
+        # Render the template
+        ret = render_to_string(t.name, context)
+    
+        return ret
     
     def __unicode__(self):
         return '%s - %s' % (self.position.name, self.content_object)
