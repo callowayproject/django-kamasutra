@@ -30,19 +30,7 @@ class PositionContentNode(Node):
         if str(kwargs.get('as_contenttype', 'True')).lower() == 'false':
             self.as_contenttype = False
         
-        if position_settings.TEMPLATETAG_DEBUG:
-            print '****PositionContentNode****'
-            print '****__init__****'
-            print 'position: %s' % self.position
-            print 'varname: %s' % self.varname
-            print 'limit: %s' % self.limit
-            print 'as_contenttype: %s' % self.as_contenttype
-        
     def render(self, context):
-        if position_settings.TEMPLATETAG_DEBUG:
-            print '****PositionContentNode****'
-            print '****render****'
-            
         pos = None
         try:
             pos = Variable(self.position).resolve(context)
@@ -52,14 +40,8 @@ class PositionContentNode(Node):
             except:
                 return ""
         
-
         objects = Position.objects.get_content(position=pos, count=self.limit, as_contenttype=self.as_contenttype)
         context[self.varname] = objects
-        
-        if position_settings.TEMPLATETAG_DEBUG:
-            print 'Value for position: %s' % pos
-            print 'Value for varname: %s' % context[self.varname]
-        
         return ""
 
 
@@ -67,20 +49,8 @@ class ApplicablePositionsNode(Node):
     def __init__(self, obj=None, content_type_id=None, object_id=None, varname=None, return_all=False):
         (self.obj, self.varname, self.return_all) = (obj, varname, return_all)
         (self.content_type_id, self.object_id) = (content_type_id, object_id)
-        if position_settings.TEMPLATETAG_DEBUG:
-            print '****ApplicablePositionNode****'
-            print '****__init__****'
-            print 'obj: %s' % self.obj
-            print 'content_type_id: %s' % self.content_type_id
-            print 'object_id: %s' % self.object_id
-            print 'return_all: %s' % self.return_all
-            print 'varname: %s' % self.varname
     
     def render(self, context):
-        if position_settings.TEMPLATETAG_DEBUG:
-            print '****ApplicablePositionsNode****'
-            print '****render****'
-            
         obj = None
         try:
             obj = Variable(self.obj).resolve(context)
@@ -109,10 +79,6 @@ class ApplicablePositionsNode(Node):
             context[self.varname] = Position.objects.get_applicable(obj, self.return_all)
         except:
             pass
-            
-        if position_settings.TEMPLATETAG_DEBUG:
-            print 'Value for obj: %s' % obj
-            print 'Value for varname: %s' % context[self.varname]
         
         return ""  
         
@@ -121,19 +87,8 @@ class ContentPositionsNode(Node):
     def __init__(self, obj=None, content_type_id=None, object_id=None, varname=None):
         (self.obj, self.varname) = (obj, varname)
         (self.content_type_id, self.object_id) = (content_type_id, object_id)
-        if position_settings.TEMPLATETAG_DEBUG:
-            print '****ContentPositionsNode****'
-            print '****__init__****'
-            print 'obj: %s' % self.obj
-            print 'varname: %s' % self.varname
-            print 'content_type_id: %s' % self.content_type_id
-            print 'object_id: %s' % self.object_id
     
     def render(self, context):
-        if position_settings.TEMPLATETAG_DEBUG:
-            print '****ContentPositionsNode****'
-            print '****render****'
-            
         obj = None
         try:
             obj = Variable(self.obj).resolve(context)
@@ -158,10 +113,6 @@ class ContentPositionsNode(Node):
                 pass
         
         context[self.varname] = Position.objects.positions_for_object(obj)
-            
-        if position_settings.TEMPLATETAG_DEBUG:
-            print 'Value for obj: %s' % obj
-            print 'Value for varname: %s' % context[self.varname]
         
         return "" 
         
@@ -175,19 +126,7 @@ class PositionNode(Node):
         if str(kwargs.get('slugify', 'True')).lower() == 'true':
             self.slugify = True
         
-        if position_settings.TEMPLATETAG_DEBUG:
-            print '****PositionNode****'
-            print '****__init__****'
-            print 'prefix: %s' % self.prefix
-            print 'name: %s' % self.name
-            print 'varname: %s' % self.varname
-            print 'slugify: %s' % self.slugify
-        
     def render(self, context):
-        if position_settings.TEMPLATETAG_DEBUG:
-            print '****PositionNode****'
-            print '****render****'
-        
         try:
             self.name = Variable(self.name).resolve(context)
             if self.slugify:
@@ -212,12 +151,6 @@ class PositionNode(Node):
             context[self.varname] = position
         except Position.DoesNotExist:
             pass
-    
-        if position_settings.TEMPLATETAG_DEBUG:
-            print 'Value for self.name: %s' % self.name
-            print 'Value for self.prefix: %s' % self.prefix
-            print 'Value for s_name: %s' % s_name
-            print 'Value for varname: %s' % context[self.varname]
                         
         return ""
         
@@ -228,32 +161,16 @@ class RenderPositionContentNode(Node):
         self.template = template
         self.suffix = suffix
         
-        if position_settings.TEMPLATETAG_DEBUG:
-            print '****RenderPositionContentNode****'
-            print '****__init__****'
-            print 'pc: %s' % self.pc
-            print 'template: %s' % self.template
-            print 'suffix: %s' % self.suffix
-        
     def render(self, context):
-        if position_settings.TEMPLATETAG_DEBUG:
-            print '****RenderPositionContentNode****'
-            print '****render****'
-        
+        suffix, template = self.suffix, self.template
         try:
             pc = Variable(self.pc).resolve(context)
             if not isinstance(pc, PositionContent):
                 return None
         except:
-            if position_settings.TEMPLATETAG_DEBUG:
-                print 'pc is undefined.'
             return None
             
-        tpl = pc.render(template=self.template, suffix=self.suffix)
-    
-        if position_settings.TEMPLATETAG_DEBUG:
-            print 'Value for pc: %s' % pc
-            print 'Value for tpl: %s' % tpl
+        tpl = pc.render(template=template, suffix=suffix)
                         
         return tpl
         
@@ -394,7 +311,7 @@ def do_render_position_content(parser, token):
         if not extra[0] in ['suffix', 'template']:
             raise TemplateSyntaxError, "Last argment must of either suffix or template for tag %s." % argv[0]
             
-        kwargs = {extra[0]: extra[1],}
+        kwargs = {str(extra[0]): extra[1],}
         return RenderPositionContentNode(argv[1], **kwargs)
     
     

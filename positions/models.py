@@ -239,37 +239,31 @@ class PositionContent(models.Model):
             # Retreive the template passed in
             t = get_template(template)
         except:
-            print '1'
-            try:
-                # Make a key based off of associated content object
-                key = '%s.%s' % (app, model)
-                # Retreive the template from the settings
-                t = get_template(position_settings.TEMPLATES.get(key, ""))
-            except:
-                print '2'
-                if suffix:
-                    try:
-                        # Next try to retrieve the template with a suffix
-                        t = get_template('positions/render/%s/%s__%s__%s.html' % (
-                            self.position.name, app, model, suffix))
-                    except:
-                        print '3'
-                        pass
-                else:
-                    try:
-                        # Retrieve the template based of off the content object
-                        t = get_template('positions/render/%s/%s__%s.html' % (
-                            self.position.name, app, model)) 
-                    except:
-                        print '4'
-                        pass
-                if not t:
-                    print '5'
+            if suffix:
+                try:
+                    # Next try to retrieve the template with a suffix
+                    t = get_template('positions/render/%s/%s__%s__%s.html' % (
+                        self.position.name, app, model, suffix))
+                except:
+                    pass
+            else:
+                try:
+                    # Retrieve the template based of off the content object
+                    t = get_template('positions/render/%s/%s__%s.html' % (
+                        self.position.name, app, model)) 
+                except:
+                    pass
+            if not t:
+                try:
+                    # Make a key based off of associated content object
+                    key = '%s.%s' % (app, model)
+                    # Retreive the template from the settings
+                    t = get_template(position_settings.TEMPLATES.get(key, ""))
+                except:
                     try:
                         # Last resort, get template default
                         t = get_template('positions/render/default.html')
                     except:
-                        print '6'
                         pass
             
         if not t: return None

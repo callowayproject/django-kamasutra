@@ -10,8 +10,6 @@ CONTENT_OVERLAP_COUNT = getattr(settings, 'POSITION_CONTENT_OVERLAP_COUNT', 2)
 CONBINE_STRING = getattr(settings, 'POSITION_PAGE_COMBINE_STRING', '__')
 
 ADMIN_URL = getattr(settings, 'POSITION_ADMIN_URL', 'admin')
-# Boolean value, when set to True, shows detailed debug information in console.
-TEMPLATETAG_DEBUG = getattr(settings, 'POSITION_TEMPLATETAG_DEBUG', settings.TEMPLATE_DEBUG)
 
 # List of templates per model
 TEMPLATES = getattr(settings, "POSITION_TEMPLATES", {})
