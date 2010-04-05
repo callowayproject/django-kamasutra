@@ -29,8 +29,7 @@ def widget_data(request, content_type_id, object_id):
     
     positions = Position.objects.get_applicable(obj)
     
-    
-    data = [pos.name for pos in positions]
+    data = [{"id":pos.pk,"name":pos.name,"value":pos.name} for pos in positions if request.GET.get('term', "") in pos.name]
     
     return HttpResponse(simplejson.dumps(data),
                                     mimetype='application/json')
