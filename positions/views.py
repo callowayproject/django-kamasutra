@@ -6,6 +6,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.safestring import mark_safe
+from django.core import urlresolvers
 
 import simplejson
 
@@ -100,6 +101,9 @@ def order_content(request, position_id, template_name='admin/positions/order.htm
         for content in position.positioncontent_set.all():
             form = PositionContentOrderForm(instance=content, prefix=str(content.pk))
             form.fields['order'].label = mark_safe('<span class="position_order">%s</span> %s ' % (content.order+1, content))
+            form.fields['order'].content = content
+            admin_url_name = "admin:%s_%s_change" % (content.content_object._meta.app_label, content.content_object._meta.module_name)
+            form.fields['order'].content_edit = urlresolvers.reverse(admin_url_name, args=(content.content_object.pk,))
             forms.append(form)
     
     return render_to_response(template_name, 
