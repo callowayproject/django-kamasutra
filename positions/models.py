@@ -252,7 +252,8 @@ class PositionContent(models.Model):
                     t = get_template('positions/render/%s/%s__%s.html' % (
                         self.position.name, app, model)) 
                 except:
-                    pass
+                    t = get_template('positions/render/%s__%s.html' % (
+                        app, model))
             if not t:
                 try:
                     # Make a key based off of associated content object
