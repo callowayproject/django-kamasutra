@@ -131,7 +131,7 @@ class PositionManager(models.Manager):
         else:
             positions = self.filter(
                 Q(eligible_types__in=[ctype,]) | Q(allow_all_types=True)).exclude(
-                    positioncontent__content_type=ctype, positioncontent__object_id=obj.pk)
+                    positioncontent__content_type=ctype, positioncontent__object_id=str(obj.pk))
                     
         return positions
         
