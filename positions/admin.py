@@ -3,7 +3,7 @@ from positions.models import Position, PositionContent
 
 class PositionAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'count', 'change_content_order')
-    search_fieldsets = ('name', 'description', )
+    search_fields = ('name', 'description', )
     list_per_page = 25
     filter_horizontal = ('eligible_types','sites',)
 
