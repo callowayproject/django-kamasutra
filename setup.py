@@ -1,7 +1,7 @@
 from distutils.core import setup
 
-setup(name='django-kamasutra',
-      version='.1',
+setup(name='kamasutra',
+      version='0.1.1',
       description='',
       long_description='',
       author='Jose Soares',
