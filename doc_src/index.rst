@@ -16,16 +16,6 @@ Contents:
    
    installation
    getting_started
-   
-
-Reference
-=========
-
-.. toctree::
-    :maxdepth: 2
-    :glob:
-    
-    reference/index
     
     
 Helping Out
