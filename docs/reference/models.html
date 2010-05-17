@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Models &mdash; Django Kamasutra v0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Django Kamasutra v0.1 documentation" href="../index.html" />
+    <link rel="up" title="Reference" href="index.html" />
+    <link rel="next" title="TemplateTags" href="templatetags.html" />
+    <link rel="prev" title="Reference" href="index.html" /> 
+  </head>
+  <body>
+<div id="docstitle">
+	<p>Django Kamasutra v0.1 documentation</p>
+</div>
+<div id="header">
+	<div id="title"><h1>Models</h1></div>
+	<ul id="headerButtons">
+		<li id="toc_button"><div class="headerButton"><a href="#">Table of Contents</a></div></li>
+		<li id="page_buttons">
+			<div class="headerButton"><a href="../genindex.html" title="General Index" accesskey="I">index</a></div>
+			<div class="headerButton"><a href="templatetags.html" title="TemplateTags" accesskey="N">next</a></div>
+			<div class="headerButton"><a href="index.html" title="Reference" accesskey="P">previous</a></div>
+		</li>
+	</ul>
+</div>
+
+<div id="sphinxsidebar">
+  <div class="sphinxsidebarwrapper">
+	<ul><li class="toctree-l1"><a href="../index.html">Main Page</a></li></ul>
+	<ul>
+<li class="toctree-l1"><a class="reference external" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference external" href="../getting_started.html">Getting Started</a></li>
+</ul>
+
+    <div id="searchbox" style="display: none">
+      
+        <form class="search" action="../search.html" method="get">
+			<div class="search-wrapper">
+			<span class="search-left"></span>
+			<input class="prettysearch" type="text" name="q" size="18" />
+			<span class="search-right">&nbsp;</span>
+			</div>
+          <input type="submit" value="Search" class="searchbutton" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+        <p class="searchtip" style="font-size: 90%">
+        Enter search terms or a module, class or function name.
+        </p>
+    </div>
+    <script type="text/javascript">$('#searchbox').show(0);</script>
+  </div>
+</div>
+
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="models">
+<h1>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="position">
+<h2>Position<a class="headerlink" href="#position" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="17%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head" colspan="3">Attributes</th>
+</tr>
+<tr><th class="head">Attribute</th>
+<th class="head">Type</th>
+<th class="head">Extra</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>name</td>
+<td>SlugField</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>count</td>
+<td>IntegerField</td>
+<td>default=1</td>
+</tr>
+<tr><td>eligible_types</td>
+<td>ManyToManyField</td>
+<td>to django.contrib.contenttypes.models.ContentType</td>
+</tr>
+<tr><td>allow_all_types</td>
+<td>BooleanField</td>
+<td>null=True, blank=True</td>
+</tr>
+<tr><td>description</td>
+<td>TextField</td>
+<td>blank=True</td>
+</tr>
+<tr><td>sites</td>
+<td>ManyToManyField</td>
+<td>to django.contrib.sites.models.Site</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="positioncontent">
+<h2>PositionContent<a class="headerlink" href="#positioncontent" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="19%" />
+<col width="64%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head" colspan="3">Attributes</th>
+</tr>
+<tr><th class="head">Attribute</th>
+<th class="head">Type</th>
+<th class="head">Extra</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>position</td>
+<td>ForeignKey</td>
+<td>to positions.models.Position</td>
+</tr>
+<tr><td>content_type</td>
+<td>ForeignKey</td>
+<td>to django.contrib.contenttypes.models.ContentType</td>
+</tr>
+<tr><td>object_id</td>
+<td>CharField</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>content_object</td>
+<td>GenericForeignKey</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>order</td>
+<td>IntegerField</td>
+<td>default=1</td>
+</tr>
+<tr><td>add_date</td>
+<td>DateTimeField</td>
+<td>default=default=datetime.datetime.now</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head" colspan="2">Methods</th>
+</tr>
+<tr><th class="head">Method</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>render</td>
+<td>renders the content object according to its content type</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div> 
+        </div>
+      </div>
+    <div class="footer">
+    <p>
+      &copy; Copyright 2009, The Washington Times.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+	</p>
+    </div>
+      <div class="clearer"></div>
+    </div>
+	<div id="breadcrumbs">
+		<a href="index.html" accesskey="U">Reference</a><img src="../_static/triangle_closed.png" height="9" width="9" alt="&gt;">
+		Models
+		</ul>
+	</div>
+	<script type="text/javascript" charset="utf-8" src="../_static/toc.js"></script>
+  </body>
+</html>

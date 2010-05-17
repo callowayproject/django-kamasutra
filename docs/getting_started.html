@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting Started &mdash; Django Kamasutra v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Django Kamasutra v0.1 documentation" href="index.html" />
+    <link rel="next" title="Reference" href="reference/index.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+  </head>
+  <body>
+<div id="docstitle">
+	<p>Django Kamasutra v0.1 documentation</p>
+</div>
+<div id="header">
+	<div id="title"><h1>Getting Started</h1></div>
+	<ul id="headerButtons">
+		<li id="toc_button"><div class="headerButton"><a href="#">Table of Contents</a></div></li>
+		<li id="page_buttons">
+			<div class="headerButton"><a href="genindex.html" title="General Index" accesskey="I">index</a></div>
+			<div class="headerButton"><a href="reference/index.html" title="Reference" accesskey="N">next</a></div>
+			<div class="headerButton"><a href="installation.html" title="Installation" accesskey="P">previous</a></div>
+		</li>
+	</ul>
+</div>
+
+<div id="sphinxsidebar">
+  <div class="sphinxsidebarwrapper">
+	<ul><li class="toctree-l1"><a href="index.html">Main Page</a></li></ul>
+	<ul class="current">
+<li class="toctree-l1"><a class="reference external" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference external" href="">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference external" href="#creating-your-first-position">Creating your first position</a></li>
+<li class="toctree-l2"><a class="reference external" href="#add-something-to-your-position">Add something to your Position</a></li>
+<li class="toctree-l2"><a class="reference external" href="#retrieve-your-position-content">Retrieve your position content</a></li>
+<li class="toctree-l2"><a class="reference external" href="#retrieve-your-position-content-via-templatetag">Retrieve your position content via templatetag</a></li>
+</ul>
+</li>
+</ul>
+
+    <div id="searchbox" style="display: none">
+      
+        <form class="search" action="search.html" method="get">
+			<div class="search-wrapper">
+			<span class="search-left"></span>
+			<input class="prettysearch" type="text" name="q" size="18" />
+			<span class="search-right">&nbsp;</span>
+			</div>
+          <input type="submit" value="Search" class="searchbutton" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+        <p class="searchtip" style="font-size: 90%">
+        Enter search terms or a module, class or function name.
+        </p>
+    </div>
+    <script type="text/javascript">$('#searchbox').show(0);</script>
+  </div>
+</div>
+
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="creating-your-first-position">
+<h2>Creating your first position<a class="headerlink" href="#creating-your-first-position" title="Permalink to this headline">¶</a></h2>
+<p>The minimum required arguments to create a positions is a <cite>name</cite>, which is a <cite>SlugField</cite>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">positions.models</span> <span class="kn">import</span> <span class="n">Position</span>
+
+<span class="n">position</span> <span class="o">=</span> <span class="n">Position</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;MyPosition&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="add-something-to-your-position">
+<h2>Add something to your Position<a class="headerlink" href="#add-something-to-your-position" title="Permalink to this headline">¶</a></h2>
+<p>The position manager has a <cite>add_object</cite> method that takes, at minimum, 2 arguments, <cite>position</cite> and <cite>obj</cite></p>
+<ul class="simple">
+<li><strong>position</strong> should be a <cite>positions.Position</cite> instance</li>
+<li><strong>obj</strong> can be any model instance</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">myapp.models</span> <span class="kn">import</span> <span class="n">MyApp</span>
+
+<span class="n">obj</span> <span class="o">=</span> <span class="n">MyApp</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_latest</span><span class="p">()</span>
+
+<span class="n">Position</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="n">position</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="n">obj</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="retrieve-your-position-content">
+<h2>Retrieve your position content<a class="headerlink" href="#retrieve-your-position-content" title="Permalink to this headline">¶</a></h2>
+<p>The position manager has a <cite>get_content</cite> method that takes at least 1 argument, <cite>position</cite>.</p>
+<ul class="simple">
+<li><strong>position</strong> should be a <cite>positions.Position</cite> instance</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">position</span> <span class="o">=</span> <span class="n">Position</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;MyPosition&quot;</span><span class="p">)</span>
+
+<span class="n">content</span> <span class="o">=</span> <span class="n">Position</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_content</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="n">position</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="retrieve-your-position-content-via-templatetag">
+<h2>Retrieve your position content via templatetag<a class="headerlink" href="#retrieve-your-position-content-via-templatetag" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">get_position_content</span> <span class="nv">position</span> <span class="k">as</span> <span class="nv">content</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p><cite>get_position_content</cite> expects [position] [as] [varname]</p>
+<ul class="simple">
+<li><strong>position</strong> can be a positions.Position instance or a name of a position</li>
+</ul>
+<div class="highlight-django"><div class="highlight"><pre><span class="x">Position </span><span class="cp">{{</span> <span class="nv">position</span> <span class="cp">}}</span><span class="x"> has the following content:&lt;br/&gt;</span>
+<span class="x">&lt;ul&gt;</span>
+<span class="cp">{%</span> <span class="k">for</span> <span class="nv">obj</span> <span class="k">in</span> <span class="nv">content</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    &lt;li&gt;</span><span class="cp">{{</span> <span class="nv">obj</span> <span class="cp">}}</span><span class="x">&lt;/li&gt;</span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">&lt;/ul&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default the object instance will be returned, although returning the positions.PositionContent instance, which holds the generic relation between position and the object, is alse possible</p>
+<div class="last highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">get_position_content</span> <span class="nv">position</span> <span class="k">as</span> <span class="nv">content</span> <span class="nv">as_content_type</span><span class="o">=</span><span class="kp">False</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div> 
+        </div>
+      </div>
+    <div class="footer">
+    <p>
+      &copy; Copyright 2009, The Washington Times.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+	</p>
+    </div>
+      <div class="clearer"></div>
+    </div>
+	<div id="breadcrumbs">
+		Getting Started
+		</ul>
+	</div>
+	<script type="text/javascript" charset="utf-8" src="_static/toc.js"></script>
+  </body>
+</html>
