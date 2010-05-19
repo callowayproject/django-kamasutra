@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, Http404
-from django.views.decorators.cache import cache_page
+from django.views.decorators.cache import cache_page, never_cache
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
@@ -75,7 +75,6 @@ def remove(request, position_name, type, id):
     return HttpResponseRedirect(next)
 remove = staff_member_required(remove)
 
-
 def order_content(request, position_id, template_name='admin/positions/order.html'):
     
     try:
@@ -111,3 +110,4 @@ def order_content(request, position_id, template_name='admin/positions/order.htm
                                  'forms': forms,}, 
                                  context_instance=RequestContext(request))      
 order_content = staff_member_required(order_content)
+order_content = never_cache(order_content)
