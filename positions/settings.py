@@ -13,3 +13,4 @@ ADMIN_URL = getattr(settings, 'POSITION_ADMIN_URL', 'admin')
 
 # List of templates per model
 TEMPLATES = getattr(settings, "POSITION_TEMPLATES", {})
+
