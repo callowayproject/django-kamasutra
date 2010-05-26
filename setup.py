@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(name='kamasutra',
-      version='0.1.2',
+      version='0.1.3',
       description='',
       long_description='',
       author='Jose Soares',
