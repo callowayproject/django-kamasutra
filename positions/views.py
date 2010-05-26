@@ -105,7 +105,7 @@ def order_content(request, position_id, template_name='admin/positions/order.htm
             form.fields['order'].label = mark_safe('<span class="position_order">%s</span> %s ' % (content.order+1, content))
             form.fields['order'].content = content
             form.fields['order'].content_edit = ""
-            if hasattr(content, "_meta"):
+            if content.content_object and hasattr(content.content_object, "_meta"):
                 admin_url_name = "admin:%s_%s_change" % (content.content_object._meta.app_label, content.content_object._meta.module_name)
                 form.fields['order'].content_edit = urlresolvers.reverse(admin_url_name, args=(content.content_object.pk,))
             forms.append(form)
