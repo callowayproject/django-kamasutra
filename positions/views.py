@@ -7,6 +7,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.safestring import mark_safe
 from django.core import urlresolvers
+from django.core.cache import cache
 
 import simplejson
 
@@ -14,14 +15,16 @@ from positions.models import Position, PositionContent
 from positions.forms import PositionContentOrderForm
 from positions import settings as position_settings
 
-def get_admin_url(obj):
+def get_admin_url(obj, fallback="/admin/positions/"):
     """
     Returns the admin URL for the specified object, so that add and remove
     requests may redirect back to the object for which the operation was
     performed.
     """
-    return "/%s/%s/%s/%s" % (position_settings.ADMIN_URL, obj._meta.app_label,
+    if hasattr(obj, "_meta"):
+        return "/%s/%s/%s/%s" % (position_settings.ADMIN_URL, obj._meta.app_label,
             obj._meta.module_name, obj.id)
+    return fallback
  
 
 def widget_data(request, content_type_id, object_id):
@@ -111,3 +114,16 @@ def order_content(request, position_id, template_name='admin/positions/order.htm
                                  context_instance=RequestContext(request))      
 order_content = staff_member_required(order_content)
 order_content = never_cache(order_content)
+
+def purge_cache(request, position_id, template_name='admin/positions/purge_cache.html'):
+    
+    position = get_object_or_404(Position, pk=position_id)
+        
+    PositionContent.objects.rebuild_cache(position)
+    
+    return render_to_response(template_name,
+                              {'position': position},
+                              context_instance=RequestContext(request))
+    
+    
+    
