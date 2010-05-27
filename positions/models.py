@@ -125,6 +125,13 @@ class PositionManager(models.Manager):
         Gets the positions that the object can be assigned.
         """
         ctype = ContentType.objects.get_for_model(obj)
+        key = "%s.positions.applicable.%s.%s.%s" % (
+            position_settings.CACHE_PREFIX, str(ctype.pk), str(obj.pk), return_all)
+            
+        items = cache.get(key)
+        if items:
+            return items
+            
         if return_all:
             positions = self.filter(
                 Q(eligible_types__in=[ctype,]) | Q(allow_all_types=True))
@@ -133,6 +140,7 @@ class PositionManager(models.Manager):
                 Q(eligible_types__in=[ctype,]) | Q(allow_all_types=True)).exclude(
                     positioncontent__content_type=ctype, positioncontent__object_id=str(obj.pk))
                     
+        cache.set(key, positions, position_settings.CACHE_TIMEOUT)
         return positions
         
     def is_applicable(self, position, obj):
@@ -147,7 +155,17 @@ class PositionManager(models.Manager):
         if items:
             return True
         return False
-
+        
+    def can_be_positioned(self, obj):
+        """
+        Check to see if any positions can position supplied object.
+        """
+        ctype = ContentType.objects.get_for_model(obj)
+        items = self.filter(Q(eligible_types__in=[ctype,]) | Q(allow_all_types=True))
+        if items:
+            return True
+        return False
+        
 
 class Position(models.Model):
     name = models.SlugField(_('Name (slug)'), unique=True,

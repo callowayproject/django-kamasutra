@@ -1,5 +1,7 @@
 {% if change %}
 {% load position_tags %}
+{% can_be_positioned content_type_id object_id as can_be_positioned %}
+{% if can_be_positioned %}
 {% get_applicable_positions content_type_id object_id as app_positions %}
 {% get_content_positions content_type_id object_id as selected_positions %}
 <script type="text/javascript">
@@ -56,4 +58,5 @@
     	{% endfor %}
     </ul>
 </div>
+{% endif %}
 {% endif %}

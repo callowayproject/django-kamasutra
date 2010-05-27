@@ -175,6 +175,39 @@ class RenderPositionContentNode(Node):
         return tpl
         
         
+class CanBePositionedNode(Node):
+    def __init__(self, obj=None, content_type_id=None, object_id=None, varname=None):
+        self.obj, self.content_type_id = obj, content_type_id
+        self.object_id, self.varname = object_id, varname
+        
+    def render(self, context):
+        obj = None
+        try:
+            obj = Variable(self.obj).resolve(context)
+        except:
+            pass
+        
+        try:
+            content_type_id = Variable(self.content_type_id).resolve(context)
+        except:
+            pass
+            
+        try:
+            object_id = Variable(self.object_id).resolve(context)
+        except:
+            pass
+            
+        if not obj:
+            try:
+                ctype = ContentType.objects.get(pk=str(content_type_id))
+                obj = ctype.get_object_for_this_type(pk=str(object_id))
+            except:
+                pass
+                
+        context[self.varname] = Position.objects.can_be_positioned(obj)
+        return ""
+        
+        
 def do_get_position_content(parser, token):
     """
     {% get_position_content position as content %}
@@ -314,9 +347,31 @@ def do_render_position_content(parser, token):
         kwargs = {str(extra[0]): extra[1],}
         return RenderPositionContentNode(argv[1], **kwargs)
     
+def do_can_be_positioned(parser, token):
+    """
+    {% can_be_positioned [object] as [varname] %}
+    {% can_be_positioned [content_type_id] [object_id] as [varname] %}
+    {% can_be_positioned story as story_can_be_positioned %}
+    {% can_be_positioned 23 1232 as object_can_be_positioned %}
+    """
+    argv = token.contents.split()
+    argc = len(argv)
     
+    if argc < 4 or argc > 5:
+        raise TemplateSyntaxError, "Tag %s takes either 3 or 4 arguments," % argv[0]
+        
+    if argc == 4:
+        if argv[2] != "as":
+            raise TemplateSyntaxError, 'Second argument must be "as" for tag %s.' % argv[0]
+        return CanBePositionedNode(obj=argv[1], varname=argv[3])
+    elif argc == 5:
+        if argv[3] != "as":
+            raise TemplateSyntaxError, 'Third argument must be "as" for tag %s.' % argv[0]
+        return CanBePositionedNode(content_type_id=argv[1], object_id=argv[2], varname=argv[4])
+        
 register.tag("get_position_content", do_get_position_content)
 register.tag("get_content_positions", do_get_content_positions)
 register.tag("get_applicable_positions", do_get_applicable_positions)
 register.tag("get_position", do_get_position)
 register.tag("render_position_content", do_render_position_content)
+register.tag("can_be_positioned", do_can_be_positioned)
