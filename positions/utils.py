@@ -1,4 +1,4 @@
-from positions import settings as position_settings
+from positions import settings
 
 def get_cache_key(position, extra=''):
     from positions.models import Position
@@ -10,6 +10,6 @@ def get_cache_key(position, extra=''):
         extra = ''
         
     return '%s.%s:%s' % (
-        position_settings.CACHE_PREFIX, 
+        settings.CACHE_PREFIX, 
         str(position.pk), 
         extra or str(position.count))    
