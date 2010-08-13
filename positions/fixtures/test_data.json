@@ -1,0 +1,69 @@
+[
+	{
+		"pk": 1,
+		"model": "positions.simpletext",
+		"fields": {
+			"firstname": "Joe",
+			"lastname": "Blow",
+			"favorite_color": "red"
+		}
+	}, {
+		"pk": 2,
+		"model": "positions.simpletext",
+		"fields": {
+			"firstname": "Bobby",
+			"lastname": "Tables",
+			"favorite_color": "black"
+		}
+	}, {
+		"pk": 3,
+		"model": "positions.simpletext",
+		"fields": {
+			"firstname": "Jenny",
+			"lastname": "Penny",
+			"favorite_color": "blue"
+		}
+	}, {
+		"pk": 4,
+		"model": "positions.simpletext",
+		"fields": {
+			"firstname": "Chris",
+			"lastname": "Smith",
+			"favorite_color": "orange"
+		}
+	}, {
+		"pk": 5,
+		"model": "positions.simpletext",
+		"fields": {
+			"firstname": "Eddie",
+			"lastname": "Freddie",
+			"favorite_color": "silver"
+		}
+	}, {
+		"pk": 6,
+		"model": "positions.simpletext",
+		"fields": {
+			"firstname": "Laura",
+			"lastname": "Mara",
+			"favorite_color": "pink"
+		}
+	}, {
+		"pk": 1,
+		"model": "positions.simplecategory",
+		"fields": {
+			"name": "Pros"
+		}
+	}, {
+		"pk": 2,
+		"model": "positions.simplecategory",
+		"fields": {
+			"name": "Semi-Pro"
+		}
+	}, {
+		"pk": 3,
+		"model": "positions.simplecategory",
+		"fields": {
+			"name": "Amateur"
+		}
+	}
+]
