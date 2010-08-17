@@ -11,7 +11,7 @@ class PositionAdmin(admin.ModelAdmin):
     filter_horizontal = ('eligible_types',)
 
     def change_content_order(self, obj):
-        return '<a href="%s">Change Order</a>' % reverse('positions_ordercontent', args=(str(obj.pk,)))
+        return '<a href="%s">Change Order</a>' % reverse('positions_ordercontent', args=(str(obj.pk),))
     change_content_order.short_description = ''
     change_content_order.allow_tags = True
 
