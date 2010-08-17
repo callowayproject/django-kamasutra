@@ -16,6 +16,9 @@ Contents:
    
    installation
    getting_started
+   api
+   
+   reference/index
     
     
 Helping Out

@@ -22,7 +22,7 @@ The position manager has a `add_object` method that takes, at minimum, 2 argumen
 * **position** should be a `positions.Position` instance
 * **obj** can be any model instance
 
-::
+.. code-block:: python
     
     from myapp.models import MyApp
     
@@ -30,6 +30,12 @@ The position manager has a `add_object` method that takes, at minimum, 2 argumen
 
     Position.objects.add_object(position=position, obj=obj)
     
+    
+.. note::
+
+    The `Position` model can define which types of objects that can be added. 
+    Therefore when adding objects to a position, make sure the content types 
+    is allowed by the `Position` instance.
     
 Retrieve your position content
 ------------------------------

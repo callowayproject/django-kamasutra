@@ -9,6 +9,5 @@ Reference
    :maxdepth: 2
    :glob:
    
-   models
    templatetags
    settings

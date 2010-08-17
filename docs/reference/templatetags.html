@@ -5,13 +5,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>TemplateTags &mdash; Django Kamasutra v0.1 documentation</title>
+    <title>Template Tags &mdash; Django Kamasutra v0.1.6 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.1',
+        VERSION:     '0.1.6',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -19,23 +19,23 @@
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Django Kamasutra v0.1 documentation" href="../index.html" />
+    <link rel="top" title="Django Kamasutra v0.1.6 documentation" href="../index.html" />
     <link rel="up" title="Reference" href="index.html" />
     <link rel="next" title="Settings" href="settings.html" />
-    <link rel="prev" title="Models" href="models.html" /> 
+    <link rel="prev" title="Reference" href="index.html" /> 
   </head>
   <body>
 <div id="docstitle">
-	<p>Django Kamasutra v0.1 documentation</p>
+	<p>Django Kamasutra v0.1.6 documentation</p>
 </div>
 <div id="header">
-	<div id="title"><h1>TemplateTags</h1></div>
+	<div id="title"><h1>Template Tags</h1></div>
 	<ul id="headerButtons">
 		<li id="toc_button"><div class="headerButton"><a href="#">Table of Contents</a></div></li>
 		<li id="page_buttons">
 			<div class="headerButton"><a href="../genindex.html" title="General Index" accesskey="I">index</a></div>
 			<div class="headerButton"><a href="settings.html" title="Settings" accesskey="N">next</a></div>
-			<div class="headerButton"><a href="models.html" title="Models" accesskey="P">previous</a></div>
+			<div class="headerButton"><a href="index.html" title="Reference" accesskey="P">previous</a></div>
 		</li>
 	</ul>
 </div>
@@ -43,9 +43,15 @@
 <div id="sphinxsidebar">
   <div class="sphinxsidebarwrapper">
 	<ul><li class="toctree-l1"><a href="../index.html">Main Page</a></li></ul>
-	<ul>
-<li class="toctree-l1"><a class="reference external" href="../getting_started.html">Getting Started</a></li>
+	<ul class="current">
 <li class="toctree-l1"><a class="reference external" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference external" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference external" href="../api.html">API</a></li>
+<li class="toctree-l1 current"><a class="reference external" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference external" href="">Template Tags</a></li>
+<li class="toctree-l2"><a class="reference external" href="settings.html">Settings</a></li>
+</ul>
+</li>
 </ul>
 
     <div id="searchbox" style="display: none">
@@ -75,8 +81,124 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="templatetags">
-<h1>TemplateTags<a class="headerlink" href="#templatetags" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="template-tags">
+<span id="position-templatetags"></span><h1>Template Tags<a class="headerlink" href="#template-tags" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="get-position">
+<h2>get_position<a class="headerlink" href="#get-position" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<p>Gets a position object given in string.</p>
+<p><strong>Syntax</strong>:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">get_position</span> <span class="o">[</span><span class="nv">prefix</span><span class="o">]</span> <span class="nv">name</span> <span class="k">as</span> <span class="nv">varname</span> <span class="o">[</span><span class="nv">slugify</span><span class="o">=</span><span class="kp">True</span><span class="o">|</span><span class="nf">False</span><span class="o">]</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p><strong>Example</strong>:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">get_position</span> <span class="nv">name</span> <span class="k">as</span> <span class="nv">varname</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">get_position</span> <span class="nv">prefix</span> <span class="nv">name</span> <span class="k">as</span> <span class="nv">varname</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">get_position</span> <span class="nv">prefix</span> <span class="nv">name</span> <span class="k">as</span> <span class="nv">varname</span> <span class="nv">slugify</span><span class="o">=</span><span class="kp">True</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>The second example will conbine the prefix with <tt class="docutils literal"><span class="pre">settings.PAGE_CONBINE_STRING</span></tt> and the name given.</p>
+<p>The name can also be variables</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">get_position</span> <span class="nv">category.name</span> <span class="nv">someobject.name</span> <span class="k">as</span> <span class="nv">my_position</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>This templatetag can optionally have slugify as the last argument. This specifies weather or not to slugify the prefix and/or name. Default is <tt class="xref docutils literal"><span class="pre">False</span></tt></p>
+</blockquote>
+</div>
+<div class="section" id="get-position-content">
+<h2>get_position_content<a class="headerlink" href="#get-position-content" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<p>Gets the content in order for the <tt class="docutils literal"><span class="pre">models.Position</span></tt> object provided.</p>
+<p><strong>Syntax</strong>:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">get_position_content</span> <span class="nv">position</span> <span class="k">as</span> <span class="nv">varname</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">get_position_content</span> <span class="nv">position</span> <span class="k">as</span> <span class="nv">varname</span> <span class="o">[</span><span class="nv">limit</span><span class="o">=</span><span class="nv">N</span><span class="o">]</span> <span class="o">[</span><span class="nv">as_contenttype</span><span class="o">=</span><span class="kp">True</span><span class="o">|</span><span class="nf">False</span><span class="o">]</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>Optionally specify <tt class="docutils literal"><span class="pre">limit</span></tt> to only return that number of objects. Default is <tt class="docutils literal"><span class="pre">position.count</span></tt></p>
+<p>Optionally specify <tt class="docutils literal"><span class="pre">as_contenttype</span></tt> <tt class="xref docutils literal"><span class="pre">True</span></tt> to return the content type instance or <tt class="xref docutils literal"><span class="pre">False</span></tt> to return the <tt class="docutils literal"><span class="pre">models.PositionContent</span></tt> instances. Default is <tt class="xref docutils literal"><span class="pre">True</span></tt>.</p>
+<p><strong>Example</strong>:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">load</span> <span class="nv">positiontags</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">get_position_content</span> <span class="nv">my_position</span> <span class="k">as</span> <span class="nv">content_list</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{{</span> <span class="nv">my_position.name</span> <span class="cp">}}</span><span class="x"> has the following objects in it:&lt;br/&gt;</span>
+<span class="cp">{%</span> <span class="k">for</span> <span class="nv">content</span> <span class="k">in</span> <span class="nv">content_list</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    </span><span class="cp">{{</span> <span class="nv">content</span> <span class="cp">}}</span><span class="x">&lt;br/&gt;</span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+</blockquote>
+</div>
+<div class="section" id="get-applicable-positions">
+<h2>get_applicable_positions<a class="headerlink" href="#get-applicable-positions" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<p>Gets a <tt class="docutils literal"><span class="pre">models.Position</span></tt> list for the object provided, for which the object can be assigned to.</p>
+<p><strong>Syntax</strong>:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">get_applicable_positions</span> <span class="nv">object</span> <span class="k">as</span> <span class="nv">varname</span> <span class="o">[</span><span class="nv">all</span><span class="o">]</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">get_applicable_positions</span> <span class="nv">content_type_id</span> <span class="nv">object_id</span> <span class="k">as</span> <span class="nv">positions</span> <span class="o">[</span><span class="nv">all</span><span class="o">]</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>By default, all positions the object can be added to will be returned
+excluding the positions the object is current in. If <cite>all</cite> is specified
+then all positions, including the ones the object is currently in, will be
+returned.</p>
+<p><strong>Example</strong>:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">get_applicable_positions</span> <span class="nv">my_object</span> <span class="k">as</span> <span class="nv">position_list</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="x">This object can be assigned to these positions:</span>
+<span class="cp">{%</span> <span class="k">for</span> <span class="nv">position</span> <span class="k">in</span> <span class="nv">position_list</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    </span><span class="cp">{{</span> <span class="nv">position.name</span> <span class="cp">}}</span><span class="x">&lt;br/&gt;</span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>If we don&#8217;t have the object available, such as in the admin, we can specify the content type id and object id.</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">get_applicable_positions</span> <span class="nv">content_type_id</span> <span class="nv">object_id</span> <span class="k">as</span> <span class="nv">myobj_applicable_postions</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">get_applicable_positions</span> <span class="m">21</span> <span class="m">3</span> <span class="k">as</span> <span class="nv">myobj_applicable_postions</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+</blockquote>
+</div>
+<div class="section" id="get-content-positions">
+<h2>get_content_positions<a class="headerlink" href="#get-content-positions" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<p>Gets a <a class="reference external" href="../api.html#api-position"><em>Position</em></a> list that the spcified object is currently in.</p>
+<p><strong>Syntax</strong>:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">get_content_positions</span> <span class="nv">object</span> <span class="k">as</span> <span class="nv">positions</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">get_content_positions</span> <span class="nv">content_type_id</span> <span class="nv">object_id</span> <span class="k">as</span> <span class="nv">positions</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p><strong>Example</strong></p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">get_content_psotions</span><span class="o">}</span>
+</pre></div>
+</div>
+</blockquote>
+</div>
+<div class="section" id="can-be-positioned">
+<h2>can_be_positioned<a class="headerlink" href="#can-be-positioned" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<p>Returns True|False if the supplied object can be positioned by any current position.</p>
+<p><strong>Syntax</strong>:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">can_be_positioned</span> <span class="o">[</span><span class="nv">object</span><span class="o">]</span> <span class="k">as</span> <span class="o">[</span><span class="nv">varname</span><span class="o">]</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">can_be_positioned</span> <span class="o">[</span><span class="nv">content_type_id</span><span class="o">]</span> <span class="o">[</span><span class="nv">object_id</span><span class="o">]</span> <span class="k">as</span> <span class="o">[</span><span class="nv">varname</span><span class="o">]</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p><strong>Example</strong>:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">can_be_positioned</span> <span class="nv">myobj</span> <span class="k">as</span> <span class="nv">myobj_canbe_positioned</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">if</span> <span class="nv">myobj_canbe_positioned</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    </span><span class="cp">{{</span> <span class="nv">myobj</span> <span class="cp">}}</span><span class="x"> can be positioned</span>
+<span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>If we don&#8217;t have the object available, such as in the admin, we can specify the content type id and object id.</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">can_be_positioned</span> <span class="nv">content_type_id</span> <span class="nv">object_id</span> <span class="k">as</span> <span class="nv">myobj_canbe_positioned</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">can_be_positioned</span> <span class="m">21</span> <span class="m">3</span> <span class="k">as</span> <span class="nv">myobj_canbe_positioned</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+</blockquote>
+</div>
 </div>
 
 
@@ -93,7 +215,7 @@
     </div>
 	<div id="breadcrumbs">
 		<a href="index.html" accesskey="U">Reference</a><img src="../_static/triangle_closed.png" height="9" width="9" alt="&gt;">
-		TemplateTags
+		Template Tags
 		</ul>
 	</div>
 	<script type="text/javascript" charset="utf-8" src="../_static/toc.js"></script>
