@@ -14,5 +14,6 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     (r'^$', 'simpleapp.views.test'),
+    (r'^positions/', include("positions.urls")),
     (r'^admin/', include(admin.site.urls)),
 )

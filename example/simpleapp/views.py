@@ -1,14 +1,6 @@
-# Create your views here.
-
-
-from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django.utils.safestring import mark_safe
-from django.views.decorators.cache import cache_page
 from django.template.defaultfilters import slugify
 
 from simpleapp.models import SimpleText, SimpleCategory
