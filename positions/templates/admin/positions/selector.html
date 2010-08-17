@@ -37,7 +37,7 @@
     		        if(answer){
     		    	    var id = $(this).attr('id');
     			        var pos = id.replace('pos_','');
-    			        $.get('/position_management/remove/'+pos+'/{{ content_type_id }}/{{ object_id }}/');
+    			        $.get('/admin/position_management/remove/'+pos+'/{{ content_type_id }}/{{ object_id }}/');
     			        $(this).parent().fadeOut("250").remove();
     		        }
     		    });
