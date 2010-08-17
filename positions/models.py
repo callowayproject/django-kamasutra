@@ -7,7 +7,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.template.loader import get_template, render_to_string
 
 from positions import settings
-from positions import utils
 
 class PositionManager(models.Manager):
     
