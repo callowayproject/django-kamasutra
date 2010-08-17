@@ -1,62 +1,60 @@
 {% if change %}
-{% load position_tags %}
-{% can_be_positioned content_type_id object_id as can_be_positioned %}
-{% if can_be_positioned %}
-{% get_applicable_positions content_type_id object_id as app_positions %}
-{% get_content_positions content_type_id object_id as selected_positions %}
-<script type="text/javascript">
-    $(function() {
-        var availableTags = [{% for position in app_positions %}"{{ position.name }}",{% endfor %}];
-        $("#selector").autocomplete({
-            source: "/position_management/widget/data/{{ content_type_id }}/{{object_id}}/",
-    		//source: availableTags,
-    		minLength: 2,
-    		select: function(event, ui) {
-    		    $.get("/position_management/add/"+ ui.item.value +"/{{ content_type_id }}/{{ object_id }}/",function(){
-					$('<li><span class="deletelink" id=pos_"'+ui.item.value+'">&nbsp;</span>'+ui.item.value+'</li>').appendTo("#position-admin-widget-items");
-					$("#position-admin-widget-items li .deletelink").bind('click',function(){
-						$.get($(this).attr('rel'));
-						$(this).parent().remove();
-					});
-	$("#selector").focus().val('');
-});
-   		}
-    	});
-    	
-    	$("#selector").focus(function(){
-    	   if($(this).val() == "Type the position name to add this object to."){
-    	       $(this).val("");
-    	       $(this).removeClass("blured");
-    	   }
-    	});
-    	$("#selector").blur(function(){
-    	   if($(this).val() == ""){
-    	       $(this).val("Type the position name to add this object to.");
-    	       $(this).addClass("blured");
-    	   }
-    	});
-		$("#position-admin-widget-items li .deletelink").bind('click',function(){
-		    var answer = confirm('Are you sure you want to remove this?');
-		    if(answer){
-		    	var id = $(this).attr('id');
-			    var pos = id.replace('pos_','');
-			    $.get('/position_management/remove/'+pos+'/{{ content_type_id }}/{{ object_id }}/');
-			    $(this).parent().fadeOut("250").remove();
-		    }
-		});
-	});
-</script>
+    {% load position_tags %}
+    {% can_be_positioned content_type_id object_id as can_be_positioned %}
+    
+    {% if can_be_positioned %}
+        {# get_applicable_positions content_type_id object_id as app_positions #}
+        {% get_content_positions content_type_id object_id as selected_positions %}
+        <script type="text/javascript">
+            $(function() {
+                $("#selector").autocomplete({
+                    source: "{% url positions_jsondata content_type_id object_id %}",
+    		        minLength: 2,
+    		        select: function(event, ui) {
+    		            $.get("/position_management/add/"+ ui.item.value +"/{{ content_type_id }}/{{ object_id }}/",function(){
+					        $('<li><span class="deletelink" id=pos_"'+ui.item.value+'">&nbsp;</span>'+ui.item.value+'</li>').appendTo("#position-admin-widget-items");
+					        $("#position-admin-widget-items li .deletelink").bind('click',function(){
+						        $.get($(this).attr('rel'));
+						        $(this).parent().remove();
+					        });
+	                        $("#selector").focus().val('');
+                        });
+   		            }
+    	        });
+        	    $("#selector").focus(function(){
+                    if($(this).val() == "Type the position name to add this object to."){
+        	            $(this).val("");
+        	            $(this).removeClass("blured");
+        	        }
+        	    });
+        	    $("#selector").blur(function(){
+        	        if($(this).val() == ""){
+        	            $(this).val("Type the position name to add this object to.");
+        	            $(this).addClass("blured");
+        	        }
+        	    });
+    		    $("#position-admin-widget-items li .deletelink").bind('click',function(){
+    		        var answer = confirm('Are you sure you want to remove this?');
+    		        if(answer){
+    		    	    var id = $(this).attr('id');
+    			        var pos = id.replace('pos_','');
+    			        $.get('/position_management/remove/'+pos+'/{{ content_type_id }}/{{ object_id }}/');
+    			        $(this).parent().fadeOut("250").remove();
+    		        }
+    		    });
+    	    });
+        </script>
 
-<div id="position-admin-widget">
-    <div id="position-admin-widget-input">
-        <label for="selector"><strong>Positions: </strong></label>
-        <input id="selector" class="blured" value="Type the position name to add this object to." />
-    </div>
-    <ul id="position-admin-widget-items">
-    	{% for position in selected_positions %}
-    		<li><span class="deletelink" id="pos_{{ position.name}}">&nbsp;</span>{{ position.name }}</li>
-    	{% endfor %}
-    </ul>
-</div>
-{% endif %}
+        <div id="position-admin-widget">
+            <div id="position-admin-widget-input">
+                <label for="selector"><strong>Positions: </strong></label>
+                <input id="selector" class="blured" value="Type the position name to add this object to." />
+            </div>
+            <ul id="position-admin-widget-items">
+            	{% for position in selected_positions %}
+            		<li><span class="deletelink" id="pos_{{ position.name}}">&nbsp;</span>{{ position.name }}</li>
+            	{% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 {% endif %}
