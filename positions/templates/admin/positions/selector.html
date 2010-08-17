@@ -1,17 +1,16 @@
 {% if change %}
     {% load position_tags %}
     {% can_be_positioned content_type_id object_id as can_be_positioned %}
-    
     {% if can_be_positioned %}
         {# get_applicable_positions content_type_id object_id as app_positions #}
         {% get_content_positions content_type_id object_id as selected_positions %}
         <script type="text/javascript">
             $(function() {
                 $("#selector").autocomplete({
-                    source: "{% url positions_jsondata content_type_id object_id %}",
+                    source: "{% url positions.views.json_data content_type_id object_id %}",
     		        minLength: 2,
     		        select: function(event, ui) {
-    		            $.get("/position_management/add/"+ ui.item.value +"/{{ content_type_id }}/{{ object_id }}/",function(){
+    		            $.get("/admin/position_management/add/"+ ui.item.value +"/{{ content_type_id }}/{{ object_id }}/",function(){
 					        $('<li><span class="deletelink" id=pos_"'+ui.item.value+'">&nbsp;</span>'+ui.item.value+'</li>').appendTo("#position-admin-widget-items");
 					        $("#position-admin-widget-items li .deletelink").bind('click',function(){
 						        $.get($(this).attr('rel'));
@@ -44,7 +43,6 @@
     		    });
     	    });
         </script>
-
         <div id="position-admin-widget">
             <div id="position-admin-widget-input">
                 <label for="selector"><strong>Positions: </strong></label>
