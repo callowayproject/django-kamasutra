@@ -11,3 +11,7 @@ Add **positions** to your settings **INSTALLED_APPS**::
         'positions',
         ...
     )
+    
+Run syncdb::
+
+    >>> ./manage.py syncdb

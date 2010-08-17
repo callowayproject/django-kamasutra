@@ -1,6 +1,9 @@
+.. _api:
 
-Models
-======
+API
+===
+
+.. _api_position:
 
 Position
 --------
@@ -13,11 +16,11 @@ Attribute          Type              Extra
 name               SlugField
 count              IntegerField      default=1
 eligible_types     ManyToManyField   to django.contrib.contenttypes.models.ContentType
-allow_all_types    BooleanField      null=True, blank=True
+allow_all_types    BooleanField      default=False
 description        TextField         blank=True
-sites              ManyToManyField   to django.contrib.sites.models.Site
 =================  ================  =============================================================
 
+.. _api_positioncontent:
 
 PositionContent
 ---------------
@@ -35,6 +38,8 @@ order              IntegerField        default=1
 add_date           DateTimeField       default=default=datetime.datetime.now
 =================  ==================  =============================================================
 
+Functions
+~~~~~~~~~
 
 =================  =================================================================================
 Methods

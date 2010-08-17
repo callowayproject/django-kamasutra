@@ -5,49 +5,57 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Models &mdash; Django Kamasutra v0.1.6 documentation</title>
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <title>API &mdash; Django Kamasutra v0.1.6 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
+        URL_ROOT:    '',
         VERSION:     '0.1.6',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Django Kamasutra v0.1.6 documentation" href="../index.html" /> 
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Django Kamasutra v0.1.6 documentation" href="index.html" />
+    <link rel="next" title="Reference" href="reference/index.html" />
+    <link rel="prev" title="Getting Started" href="getting_started.html" /> 
   </head>
   <body>
 <div id="docstitle">
 	<p>Django Kamasutra v0.1.6 documentation</p>
 </div>
 <div id="header">
-	<div id="title"><h1>Models</h1></div>
+	<div id="title"><h1>API</h1></div>
 	<ul id="headerButtons">
 		<li id="toc_button"><div class="headerButton"><a href="#">Table of Contents</a></div></li>
 		<li id="page_buttons">
-			<div class="headerButton"><a href="../genindex.html" title="General Index" accesskey="I">index</a></div>
+			<div class="headerButton"><a href="genindex.html" title="General Index" accesskey="I">index</a></div>
+			<div class="headerButton"><a href="reference/index.html" title="Reference" accesskey="N">next</a></div>
+			<div class="headerButton"><a href="getting_started.html" title="Getting Started" accesskey="P">previous</a></div>
 		</li>
 	</ul>
 </div>
 
 <div id="sphinxsidebar">
   <div class="sphinxsidebarwrapper">
-	<ul><li class="toctree-l1"><a href="../index.html">Main Page</a></li></ul>
-	<ul>
-<li class="toctree-l1"><a class="reference external" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference external" href="../getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference external" href="../api.html">API</a></li>
-<li class="toctree-l1"><a class="reference external" href="index.html">Reference</a></li>
+	<ul><li class="toctree-l1"><a href="index.html">Main Page</a></li></ul>
+	<ul class="current">
+<li class="toctree-l1"><a class="reference external" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference external" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference external" href="">API</a><ul>
+<li class="toctree-l2"><a class="reference external" href="#position">Position</a></li>
+<li class="toctree-l2"><a class="reference external" href="#positioncontent">PositionContent</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="reference/index.html">Reference</a></li>
 </ul>
 
     <div id="searchbox" style="display: none">
       
-        <form class="search" action="../search.html" method="get">
+        <form class="search" action="search.html" method="get">
 			<div class="search-wrapper">
 			<span class="search-left"></span>
 			<input class="prettysearch" type="text" name="q" size="18" />
@@ -72,10 +80,10 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="models">
-<h1>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="api">
+<span id="id1"></span><h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="position">
-<h2>Position<a class="headerlink" href="#position" title="Permalink to this headline">¶</a></h2>
+<span id="api-position"></span><h2>Position<a class="headerlink" href="#position" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="18%" />
@@ -105,21 +113,17 @@
 </tr>
 <tr><td>allow_all_types</td>
 <td>BooleanField</td>
-<td>null=True, blank=True</td>
+<td>default=False</td>
 </tr>
 <tr><td>description</td>
 <td>TextField</td>
 <td>blank=True</td>
 </tr>
-<tr><td>sites</td>
-<td>ManyToManyField</td>
-<td>to django.contrib.sites.models.Site</td>
-</tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="positioncontent">
-<h2>PositionContent<a class="headerlink" href="#positioncontent" title="Permalink to this headline">¶</a></h2>
+<span id="api-positioncontent"></span><h2>PositionContent<a class="headerlink" href="#positioncontent" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="18%" />
@@ -161,6 +165,8 @@
 </tr>
 </tbody>
 </table>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="docutils">
 <colgroup>
 <col width="17%" />
@@ -181,6 +187,7 @@
 </table>
 </div>
 </div>
+</div>
 
 
           </div> 
@@ -195,9 +202,9 @@
       <div class="clearer"></div>
     </div>
 	<div id="breadcrumbs">
-		Models
+		API
 		</ul>
 	</div>
-	<script type="text/javascript" charset="utf-8" src="../_static/toc.js"></script>
+	<script type="text/javascript" charset="utf-8" src="_static/toc.js"></script>
   </body>
 </html>

@@ -2,33 +2,33 @@
 
 {% load i18n admin_modify adminmedia %}
 
-{% block breadcrumbs %}{% if not is_popup %}
-<div class="breadcrumbs">
-     <a href="/admin/">{% trans "Home" %}</a> &rsaquo;
-     <a href="/admin/positions/">Positions</a> &rsaquo; 
-   <a href="/admin/positions/position/">Position</a>
-</div>
-{% endif %}{% endblock %}
-
-{% block sidebar %}{% endblock %}
+{% block breadcrumbs %}
+    {% if not is_popup %}
+        <div class="breadcrumbs">
+            <a href="{% url admin:index %}">{% trans "Home" %}</a> &rsaquo;
+            <a href="{% url admin:positions_index %}">{% trans "Positions" %}</a> &rsaquo; 
+            <a href="{% url admin:positions_position_change %}">{% trans "Position" %}</a>
+        </div>
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 	<div class="module">
 	    <div style="padding:10px;">
-        <h1>{{ position }}, shows {{ position.count }} 
-            item{% ifnotequal position.count 1 %}s{% endifnotequal %}.
-        </h1>
-		<form action="." method="POST">
-			<ul>
-				{% for form in forms %}  
-					{{ form.as_ul }}
-				{% endfor %}
-			</ul>
-			<div class="submit-row" {% if is_popup %}style="overflow: auto;"{% endif %}>
-				<input type="submit" value="{% trans 'Save' %}" class="default" name="_save"/>
-				<INPUT type='button' onclick='history.go(-1)' value='{% trans "Cancel" %}' id='cancel' name='cancel' />
-			</div>
-		</form>
+            <h1>{{ position.name }}, shows {{ position.count }} 
+                item{% ifnotequal position.count 1 %}s{% endifnotequal %}.
+            </h1>
+    		<form action="." method="POST">
+    			<ul>
+    				{% for form in forms %}  
+    					{{ form.as_ul }}
+    				{% endfor %}
+    			</ul>
+    			<div class="submit-row" {% if is_popup %}style="overflow: auto;"{% endif %}>
+    				<input type="submit" value="{% trans 'Save' %}" class="default" name="_save"/>
+    				<input type='button' onclick='history.go(-1)' value='{% trans "Cancel" %}' id='cancel' name='cancel' />
+    			</div>
+    		</form>
 		</div>
 	</div>
 {% endblock %}
