@@ -117,12 +117,6 @@ get_content_positions
     
         {% get_content_positions object as positions %}
         {% get_content_positions content_type_id object_id as positions %}
-        
-    **Example**
-    
-    .. code-block:: django
-    
-        {% get_content_psotions}
     
         
 =================
