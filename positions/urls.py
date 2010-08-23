@@ -15,5 +15,9 @@ urlpatterns = patterns('positions.views',
         
     url(regex=r'^json/(?P<content_type_id>.*)/(?P<object_id>.*)/$',
         view="json_data",
-        name="positions_jsondata")
+        name="positions_jsondata"),
+        
+    url(regex=r'^$',
+        view='index',
+        name='positions_index')
 )

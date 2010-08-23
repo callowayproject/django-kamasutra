@@ -6,8 +6,8 @@
     {% if not is_popup %}
         <div class="breadcrumbs">
             <a href="{% url admin:index %}">{% trans "Home" %}</a> &rsaquo;
-            <a href="{% url admin:positions_index %}">{% trans "Positions" %}</a> &rsaquo; 
-            <a href="{% url admin:positions_position_change %}">{% trans "Position" %}</a>
+            <a href="{% url admin:app_list 'positions' %}">{% trans "Positions" %}</a> &rsaquo; 
+            <a href="{% url admin:positions_position_changelist %}">{% trans "Position" %}</a>
         </div>
     {% endif %}
 {% endblock %}

@@ -28,7 +28,14 @@ def get_admin_url(obj, fallback="/admin/positions/"):
         return "/%s/%s/%s/%s" % (reverse("admin:index"), obj._meta.app_label,
             obj._meta.module_name, obj.id)
     return fallback
- 
+
+def index(request):
+    """
+    This is a dummy view so we can reverse the root url
+    """
+    return Http404
+    
+
 def json_data(request, content_type_id, object_id):
     """
     This is used for the admin widget
