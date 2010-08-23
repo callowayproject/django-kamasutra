@@ -1,14 +1,9 @@
-README
-setup.py
-positions/__init__.py
-positions/admin.py
-positions/fields.py
-positions/forms.py
-positions/models.py
-positions/settings.py
-positions/tests.py
-positions/urls.py
-positions/utils.py
-positions/views.py
-positions/templatetags/__init__.py
-positions/templatetags/position_tags.py
+include LICENSE
+include README
+include requirements.txt
+
+recursive-include doc_src *.rst *.html *.css *.js *.png *.gif
+recursive-include docs *.html *.css *.js *.png *.gif
+
+recursive-include positions *.py
+recursive-include positions/templates/ *.html
