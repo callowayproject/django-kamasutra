@@ -9,7 +9,7 @@ except (IOError, OSError):
 
 setup(name='django-kamasutra',
       version=positions.get_version(),
-      description='A generic featuring application.',
+      description='A application to position objects anywhere on a page.',
       author='Jose Soares',
       author_email='josefsoares@gmail.com',
       url='http://github.com/josesoa/django-kamasutra/',
