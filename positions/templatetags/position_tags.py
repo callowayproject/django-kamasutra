@@ -169,8 +169,9 @@ class RenderPositionContentNode(Node):
                 return None
         except:
             return None
-            
-        tpl = pc.render(template=template, suffix=suffix)
+        
+        tpl = pc.render(template=template, suffix=suffix, 
+            extra_context=context.__dict__)
                         
         return tpl
         

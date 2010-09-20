@@ -243,7 +243,7 @@ class PositionContent(models.Model):
     class Meta:
         ordering = ['position__name', 'order', '-add_date']
     
-    def render(self, template=None, suffix=None):
+    def render(self, template=None, suffix=None, extra_context={}):
         t, model, app = None, "", ""
     
         model = self.content_type.model.lower()
@@ -288,7 +288,7 @@ class PositionContent(models.Model):
         
         # The conext that will be passed to the rendered template.
         context = {'obj': self.content_object, 'content': self}
-        
+        context.update(extra_context)
         # Render the template
         ret = render_to_string(t.name, context)
     
