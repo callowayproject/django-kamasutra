@@ -44,7 +44,10 @@ def json_data(request, content_type_id, object_id):
         return Http404
         
     ctype = get_object_or_404(ContentType, pk=content_type_id)
-    obj = ctype.get_object_for_this_type(id=object_id)
+    try:
+        obj = ctype.get_object_for_this_type(id=object_id)
+    except:
+        return Http404
     
     positions = Position.objects.get_applicable(obj)
     
