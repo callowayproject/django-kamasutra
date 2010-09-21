@@ -6,6 +6,9 @@ try:
     reqs = open(os.path.join(os.path.dirname(__file__),'requirements.txt')).read()
 except (IOError, OSError):
     reqs = ''
+    
+packages = find_packages()
+packages.remove('example')
 
 setup(name='django-kamasutra',
       version=positions.get_version(),
@@ -13,7 +16,7 @@ setup(name='django-kamasutra',
       author='Jose Soares',
       author_email='josefsoares@gmail.com',
       url='http://github.com/josesoa/django-kamasutra/',
-      packages=find_packages(),
+      packages=packages,
       include_package_data = True,
       install_requires = reqs,
       classifiers=['Framework :: Django',
