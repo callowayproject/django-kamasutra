@@ -1,5 +1,5 @@
 import os
-from setuptools import setup, find_packages
+from setuptools import setup
 import positions
 
 try:
@@ -7,16 +7,13 @@ try:
 except (IOError, OSError):
     reqs = ''
     
-packages = find_packages()
-packages.remove('example')
-
 setup(name='django-kamasutra',
       version=positions.get_version(),
       description='A application to position objects anywhere on a page.',
       author='Jose Soares',
       author_email='josefsoares@gmail.com',
       url='http://github.com/josesoa/django-kamasutra/',
-      packages=packages,
+      packages=['positions', 'positions.templatetags'],
       include_package_data = True,
       install_requires = reqs,
       classifiers=['Framework :: Django',
