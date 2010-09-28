@@ -74,7 +74,7 @@ Retrieve your position content via templatetag
     
 .. note::
 
-    By default the object instance will be returned, although returning the positions.PositionContent instance, which holds the generic relation between position and the object, is alse possible
+    By default the object instance will be returned, although returning the positions.PositionContent instance, which holds the generic relation between position and the object, is also possible
     
     .. code-block:: django
     
