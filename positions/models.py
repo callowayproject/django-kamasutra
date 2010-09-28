@@ -4,7 +4,7 @@ from django.db.models import Count, F, Q
 from django.utils.translation import ugettext as _
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
-from django.template.loader import get_template, render_to_string
+from django.template.loader import select_template, render_to_string
 
 from positions import settings
 
@@ -244,55 +244,47 @@ class PositionContent(models.Model):
         ordering = ['position__name', 'order', '-add_date']
     
     def render(self, template=None, suffix=None, extra_context={}):
+        """
+        Render the content using template search in the following order:
+        
+        1. Passed template
+        2. positions/render/<position>/<app>__<model>__<suffix>.html
+        3. positions/render/<position>/<app>__<model>.html
+        4. POSITION_TEMPLATES setting for content type or 
+           positions/render/<app>__<model>.html
+        5. positions/render/default.html
+        """
         t, model, app = None, "", ""
-    
+        
         model = self.content_type.model.lower()
         app = self.content_type.app_label.lower()
-           
-        try:
-            # Retreive the template passed in
-            t = get_template(template)
-        except:
-            if suffix:
-                try:
-                    # Next try to retrieve the template with a suffix
-                    t = get_template('positions/render/%s/%s__%s__%s.html' % (
-                        self.position.name, app, model, suffix))
-                except:
-                    pass
-            else:
-                try:
-                    # Retrieve the template based of off the content object
-                    t = get_template('positions/render/%s/%s__%s.html' % (
-                        self.position.name, app, model)) 
-                except:
-                    pass
-            if not t:
-                try:
-                    # Make a key based off of associated content object
-                    key = '%s.%s' % (app, model)
-                    # Retreive the template from the settings
-                    t = get_template(settings.TEMPLATES.get(key, ""))
-                except:
-                    try:
-                        t = get_template('positions/render/%s/default.html' % (
-                            self.position.name))
-                    except:
-                        try:
-                            # Last resort, get template default
-                            t = get_template('positions/render/default.html')
-                        except:
-                            pass
+        pos_tmpl_path = 'positions/render/%s/' % self.position.name
+        
+        template_list = []
+        if template:
+            template_list.append(template)
+        if suffix:
+            tmpl_name = '%s__%s__%s.html' % (app, model, suffix)
+            template_list.append("".join([pos_tmpl_path, tmpl_name]))
             
+        tmpl_name = '%s__%s.html' % (app, model)
+        template_list.append("".join([pos_tmpl_path, tmpl_name]))
+        
+        tmpl_name = 'positions/render/%s' % tmpl_name
+        template_list.append(
+            settings.TEMPLATES.get('%s.%s' % (app, model), tmpl_name))
+        
+        tmpl_name = "default.html"
+        template_list.append("".join([pos_tmpl_path, tmpl_name]))
+        template_list.append('positions/render/default.html')
+        
+        t = select_template(template_list)
         if not t: return None
         
-        # The conext that will be passed to the rendered template.
         context = {'obj': self.content_object, 'content': self}
         context.update(extra_context)
-        # Render the template
-        ret = render_to_string(t.name, context)
-    
-        return ret
+        
+        return render_to_response(t.name, context)
     
     def __unicode__(self):
         return '%s - %s' % (self.position.name, self.content_object)
