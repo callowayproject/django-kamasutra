@@ -284,7 +284,7 @@ class PositionContent(models.Model):
         context = {'obj': self.content_object, 'content': self}
         context.update(extra_context)
         
-        return render_to_response(t.name, context)
+        return render_to_string(t.name, context)
     
     def __unicode__(self):
         return '%s - %s' % (self.position.name, self.content_object)
