@@ -171,7 +171,7 @@ class RenderPositionContentNode(Node):
             return None
         
         tpl = pc.render(template=template, suffix=suffix, 
-            extra_context=context.__dict__)
+            context_instance=context)
                         
         return tpl
         

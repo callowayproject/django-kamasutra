@@ -5,6 +5,7 @@ from django.utils.translation import ugettext as _
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.template.loader import select_template, render_to_string
+from django.template import Context
 
 from positions import settings
 
@@ -243,7 +244,7 @@ class PositionContent(models.Model):
     class Meta:
         ordering = ['position__name', 'order', '-add_date']
     
-    def render(self, template=None, suffix=None, extra_context={}):
+    def render(self, template=None, suffix=None, extra_context={}, context_instance=None):
         """
         Render the content using template search in the following order:
         
@@ -281,10 +282,14 @@ class PositionContent(models.Model):
         t = select_template(template_list)
         if not t: return None
         
-        context = {'obj': self.content_object, 'content': self}
+        context = Context()
+        if context_instance:
+            context = context_instance
+            
+        context.update({'obj': self.content_object, 'content': self})
         context.update(extra_context)
         
-        return render_to_string(t.name, context)
+        return t.render(context)
     
     def __unicode__(self):
         return '%s - %s' % (self.position.name, self.content_object)
