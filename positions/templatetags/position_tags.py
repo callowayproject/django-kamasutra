@@ -207,7 +207,9 @@ class CanBePositionedNode(Node):
                 
         if obj:
             context[self.varname] = Position.objects.can_be_positioned(obj)
-        context[self.varname] = False
+        else:
+            context[self.varname] = False
+            
         return ""
         
         
