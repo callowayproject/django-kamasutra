@@ -205,7 +205,9 @@ class CanBePositionedNode(Node):
             except:
                 pass
                 
-        context[self.varname] = Position.objects.can_be_positioned(obj)
+        if obj:
+            context[self.varname] = Position.objects.can_be_positioned(obj)
+        context[self.varname] = False
         return ""
         
         
