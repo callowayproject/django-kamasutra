@@ -5,7 +5,7 @@ from django.utils.translation import ugettext as _
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.template.loader import select_template, render_to_string
-from django.template import Context
+from django.template import Context, RequestContext
 
 from positions import settings
 
@@ -283,8 +283,8 @@ class PositionContent(models.Model):
         if not t: return None
         
         context = Context()
-        if context_instance:
-            context = context_instance
+        if context_instance and isinstance(context_instance, RequestContext):
+            context.update(context_instance.__dict__)
             
         context.update({'obj': self.content_object, 'content': self})
         context.update(extra_context)
