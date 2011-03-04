@@ -62,7 +62,7 @@ class PositionManager(models.Manager):
         
         return True
     
-    def get_content(self, position, count=None, as_contenttype=True):
+    def get_content_old(self, position, count=None, as_contenttype=True):
         """
         Gets the content for the position given.
         """
@@ -83,7 +83,31 @@ class PositionManager(models.Manager):
             items = [item.content_object for item in items if item.content_object]
         
         return items
+    
+    def get_content(self, position, count=None, as_contenttype=True):
+        if isinstance(position, basestring):
+            items = PositionContent._default_manager.filter(
+                position__name__iexact=position).select_related().order_by('order')
+        elif isinstance(position, Position):
+            items = PositionContent._default_manager.filter(
+                position=position).select_related().order_by('order')
+        
+        if count:
+            items = items[:count]
             
+        # If supplied, return the content objects for each item.
+        if as_contenttype:
+            ctypes = {}
+            items = []
+            for item in items:
+                if item.content_type_id not in ctype:
+                    ctype[item.content_type] = []
+                ctype[item.content_type].append(item.object_id)
+            for ctype, object_ids in ctypes.items():
+                items.extend(ctype.model_class().filter(pk__in=object_ids))
+        
+        return items
+    
     def contains_object(self, position, obj):
         """
         Check if position contains object.
@@ -283,7 +307,7 @@ class PositionContent(models.Model):
         if not t: return None
         
         context = Context()
-        if context_instance and isinstance(context_instance, RequestContext):
+        if context_instance: # and isinstance(context_instance, RequestContext):
             context.update(context_instance.__dict__)
             
         context.update({'obj': self.content_object, 'content': self})

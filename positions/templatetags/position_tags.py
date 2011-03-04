@@ -21,6 +21,12 @@ def _parse_arguments(value):
             
     return ret
 
+def my_resolve(value, context):
+    try:
+        return Variable(value).resolve(context)
+    except VariableDoesNotExist:
+        return value
+
 class PositionContentNode(Node):
     def __init__(self, position, varname, **kwargs):
         self.position = position
@@ -30,7 +36,7 @@ class PositionContentNode(Node):
         if str(kwargs.get('as_contenttype', 'True')).lower() == 'false':
             self.as_contenttype = False
         
-    def render(self, context):
+    def render_old(self, context):
         pos = None
         try:
             pos = Variable(self.position).resolve(context)
@@ -43,7 +49,14 @@ class PositionContentNode(Node):
         objects = Position.objects.get_content(position=pos, count=self.limit, as_contenttype=self.as_contenttype)
         context[self.varname] = objects
         return ""
-
+    
+    def render(self, context):
+        pos = my_resolve(self.position, context)
+        
+        objects = Position.objects.get_content(position=pos, count=self.limit, as_contenttype=self.as_contenttype)
+        context[self.varname] = objects
+        return ""
+    
 
 class ApplicablePositionsNode(Node):
     def __init__(self, obj=None, content_type_id=None, object_id=None, varname=None, return_all=False):
