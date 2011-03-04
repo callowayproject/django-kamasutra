@@ -95,6 +95,19 @@ class PositionManager(models.Manager):
         if count:
             items = items[:count]
             
+        # If supplied, return the content objects for each item.
+        if as_contenttype:
+            ctypes = {}
+            items = []
+            for item in items:
+                if item.content_type_id not in ctype:
+                    ctype[item.content_type] = []
+                ctype[item.content_type].append(item.object_id)
+            for ctype, object_ids in ctypes.items():
+                items.extend(ctype.model_class().filter(pk__in=object_ids))
+        
+        return items
+    
     def contains_object(self, position, obj):
         """
         Check if position contains object.
@@ -294,7 +307,7 @@ class PositionContent(models.Model):
         if not t: return None
         
         context = Context()
-        if context_instance and isinstance(context_instance, RequestContext):
+        if context_instance: # and isinstance(context_instance, RequestContext):
             context.update(context_instance.__dict__)
             
         context.update({'obj': self.content_object, 'content': self})
