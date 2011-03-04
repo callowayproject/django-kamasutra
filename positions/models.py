@@ -62,7 +62,7 @@ class PositionManager(models.Manager):
         
         return True
     
-    def get_content(self, position, count=None, as_contenttype=True):
+    def get_content_old(self, position, count=None, as_contenttype=True):
         """
         Gets the content for the position given.
         """
@@ -83,6 +83,17 @@ class PositionManager(models.Manager):
             items = [item.content_object for item in items if item.content_object]
         
         return items
+    
+    def get_content(self, position, count=None, as_contenttype=True):
+        if isinstance(position, basestring):
+            items = PositionContent._default_manager.filter(
+                position__name__iexact=position).select_related().order_by('order')
+        elif isinstance(position, Position):
+            items = PositionContent._default_manager.filter(
+                position=position).select_related().order_by('order')
+        
+        if count:
+            items = items[:count]
             
     def contains_object(self, position, obj):
         """
