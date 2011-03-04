@@ -85,6 +85,7 @@ class PositionManager(models.Manager):
         return items
     
     def get_content(self, position, count=None, as_contenttype=True):
+        items = []
         if isinstance(position, basestring):
             items = PositionContent._default_manager.filter(
                 position__name__iexact=position).select_related().order_by('order')
