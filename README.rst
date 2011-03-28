@@ -1,3 +1,17 @@
+Backwards incompatible changes made in version 0.2.2
+====================================================
+
+**COMBINE_STRING** is now used to build the template list when using 
+``PositionContent.render`` or ``render_content`` template tag.
+
+Before:
+
+/positions/my_position/<app>__<model>.html
+
+New:
+
+/positions/my_position/<app> **<combine_string>** <model>.html
+
 
 Installation
 ============
