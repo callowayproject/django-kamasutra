@@ -24,12 +24,7 @@ Contents:
 Helping Out
 ===========
 
-* **Project Home Page** `http://opensource.washingtontimes.com/projects/django-kamasutra/ <http://opensource.washingtontimes.com/projects/django-kamasutra/>`_
-* `Feature Requests <http://opensource.washingtontimes.com/projects/django-kamasutra/features/>`_
-* `Bugs <http://opensource.washingtontimes.com/projects/django-kamasutra/bugs/>`_ 
-* `Tasks <http://opensource.washingtontimes.com/projects/django-kamasutra/tasks/>`_ 
-* `Timeline <http://opensource.washingtontimes.com/projects/django-kamasutra/timeline/>`_ 
-* `Wiki <http://opensource.washingtontimes.com/projects/django-kamasutra/wiki/>`_ 
+* **Project Home Page** `https://github.com/washingtontimes/django-kamasutra/ <https://github.com/washingtontimes/django-kamasutra>`_
 
 
  
