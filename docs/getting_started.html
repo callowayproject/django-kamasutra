@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -5,27 +6,28 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting Started &mdash; Django Kamasutra v0.1.6 documentation</title>
+    <title>Getting Started &mdash; Django Kamasutra v0.2.2 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.1.6',
-        COLLAPSE_MODINDEX: false,
+        VERSION:     '0.2.2',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Django Kamasutra v0.1.6 documentation" href="index.html" />
+    <link rel="top" title="Django Kamasutra v0.2.2 documentation" href="index.html" />
     <link rel="next" title="API" href="api.html" />
     <link rel="prev" title="Installation" href="installation.html" /> 
   </head>
   <body>
 <div id="docstitle">
-	<p>Django Kamasutra v0.1.6 documentation</p>
+	<p>Django Kamasutra v0.2.2 documentation</p>
 </div>
 <div id="header">
 	<div id="title"><h1>Getting Started</h1></div>
@@ -43,16 +45,16 @@
   <div class="sphinxsidebarwrapper">
 	<ul><li class="toctree-l1"><a href="index.html">Main Page</a></li></ul>
 	<ul class="current">
-<li class="toctree-l1"><a class="reference external" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference external" href="">Getting Started</a><ul>
-<li class="toctree-l2"><a class="reference external" href="#creating-your-first-position">Creating your first position</a></li>
-<li class="toctree-l2"><a class="reference external" href="#add-something-to-your-position">Add something to your Position</a></li>
-<li class="toctree-l2"><a class="reference external" href="#retrieve-your-position-content">Retrieve your position content</a></li>
-<li class="toctree-l2"><a class="reference external" href="#retrieve-your-position-content-via-templatetag">Retrieve your position content via templatetag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#creating-your-first-position">Creating your first position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-something-to-your-position">Add something to your Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#retrieve-your-position-content">Retrieve your position content</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#retrieve-your-position-content-via-templatetag">Retrieve your position content via templatetag</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="api.html">API</a></li>
-<li class="toctree-l1"><a class="reference external" href="reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
 </ul>
 
     <div id="searchbox" style="display: none">
@@ -145,11 +147,12 @@ is allowed by the <cite>Position</cite> instance.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>By default the object instance will be returned, although returning the positions.PositionContent instance, which holds the generic relation between position and the object, is alse possible</p>
+<p>By default the object instance will be returned, although returning the positions.PositionContent instance, which holds the generic relation between position and the object, is also possible</p>
 <div class="last highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">get_position_content</span> <span class="nv">position</span> <span class="k">as</span> <span class="nv">content</span> <span class="nv">as_content_type</span><span class="o">=</span><span class="kp">False</span> <span class="cp">%}</span><span class="x"></span>
 </pre></div>
 </div>
 </div>
+<p>Read more about <a class="reference internal" href="reference/templatetags.html#position-templatetags"><em>Template Tags</em></a></p>
 </div>
 </div>
 
@@ -159,8 +162,8 @@ is allowed by the <cite>Position</cite> instance.</p>
       </div>
     <div class="footer">
     <p>
-      &copy; Copyright 2009, The Washington Times.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+      &copy; Copyright 2011, The Washington Times.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.3.
 	</p>
     </div>
       <div class="clearer"></div>

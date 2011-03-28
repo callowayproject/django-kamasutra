@@ -1,0 +1,181 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Rendering Content &mdash; Django Kamasutra v0.2.2 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Django Kamasutra v0.2.2 documentation" href="../index.html" />
+    <link rel="up" title="Reference" href="index.html" />
+    <link rel="prev" title="Settings" href="settings.html" /> 
+  </head>
+  <body>
+<div id="docstitle">
+	<p>Django Kamasutra v0.2.2 documentation</p>
+</div>
+<div id="header">
+	<div id="title"><h1>Rendering Content</h1></div>
+	<ul id="headerButtons">
+		<li id="toc_button"><div class="headerButton"><a href="#">Table of Contents</a></div></li>
+		<li id="page_buttons">
+			<div class="headerButton"><a href="../genindex.html" title="General Index" accesskey="I">index</a></div>
+			<div class="headerButton"><a href="settings.html" title="Settings" accesskey="P">previous</a></div>
+		</li>
+	</ul>
+</div>
+
+<div id="sphinxsidebar">
+  <div class="sphinxsidebarwrapper">
+	<ul><li class="toctree-l1"><a href="../index.html">Main Page</a></li></ul>
+	<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="templatetags.html">Template Tags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Rendering Content</a></li>
+</ul>
+</li>
+</ul>
+
+    <div id="searchbox" style="display: none">
+      
+        <form class="search" action="../search.html" method="get">
+			<div class="search-wrapper">
+			<span class="search-left"></span>
+			<input class="prettysearch" type="text" name="q" size="18" />
+			<span class="search-right">&nbsp;</span>
+			</div>
+          <input type="submit" value="Search" class="searchbutton" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+        <p class="searchtip" style="font-size: 90%">
+        Enter search terms or a module, class or function name.
+        </p>
+    </div>
+    <script type="text/javascript">$('#searchbox').show(0);</script>
+  </div>
+</div>
+
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rendering-content">
+<span id="render-content"></span><h1>Rendering Content<a class="headerlink" href="#rendering-content" title="Permalink to this headline">¶</a></h1>
+<p>Because a position can contain any type of content type, we need to render
+each piece of content according to its type.</p>
+<p>There are two ways you can render the content, one is via the template tag
+<a class="reference internal" href="templatetags.html#render-position-content"><em>render_position_content</em></a>, the other way is to call the
+<cite>render</cite> method of the PositionContent <a class="reference internal" href="../api.html#api-positioncontent-functions"><em>Functions</em></a>.</p>
+<div class="section" id="templates">
+<h2>Templates<a class="headerlink" href="#templates" title="Permalink to this headline">¶</a></h2>
+<p>Out of the box, rendering a piece of content will default to template
+<cite>positions/render/default.html</cite>. You can create content type specific
+templates in this same directory to act as defaults to that content type,
+for example:</p>
+<div class="highlight-python"><pre>positions/render/
+        + blog__blog.html
+        + blog__entry.html
+        + default.html
+        + stories__story.html</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We assume the <a class="reference internal" href="settings.html#setting-combine-string"><em>POSITION_COMBINE_STRING</em></a> is set to its default
+of __ (double under score), for these examples</p>
+</div>
+<p>These templates are now the default content type specific templates that will
+be used instead of default.html.</p>
+<p>If certain positions should be render differently than others you can create
+folders with the positions name, such as:</p>
+<div class="highlight-python"><pre>positions/render/
+        + my_position/
+                + default.html</pre>
+</div>
+<p>Just like before you can specify content type specific templates within the
+position:</p>
+<div class="highlight-python"><pre>positions/render/
+        + my_position/
+                + blog__blog.html
+                + blog__entry.html
+                + default.html</pre>
+</div>
+<p>If the same position is used for multiple sections you can add a suffix when
+using the <a class="reference internal" href="templatetags.html#render-position-content"><em>render_position_content</em></a></p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">render_position_content</span> <span class="nv">pc</span> <span class="k">with</span> <span class="nv">suffix</span><span class="o">=</span><span class="nv">custom</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>This will then look for a template with the suffix custom, for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">positions</span><span class="o">/</span><span class="n">render</span><span class="o">/</span><span class="n">my_position</span><span class="o">/</span><span class="n">blog__blog__custom</span><span class="o">.</span><span class="n">html</span>
+</pre></div>
+</div>
+<p>If none of these meet your needs, you can specify a completely custom
+template:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">render_position_content</span> <span class="nv">pc</span> <span class="k">with</span> <span class="nv">template</span><span class="o">=/</span><span class="nv">myapp</span><span class="o">/</span><span class="nv">positions</span><span class="o">/</span><span class="nv">my_customtemplate.html</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<div class="section" id="template-selector">
+<h3>Template selector<a class="headerlink" href="#template-selector" title="Permalink to this headline">¶</a></h3>
+<p>Here is the template list that is built in order to select the right template
+for the content being rendered</p>
+<div class="highlight-python"><pre>1. &lt;custom_template_path&gt;
+2. positions/render/&lt;position_name&gt;/&lt;app&gt;&lt;combine_string&gt;&lt;model&gt;&lt;combine_string&gt;&lt;suffix&gt;.html
+3. positions/render/&lt;position_name&gt;/&lt;app&gt;&lt;combine_string&gt;&lt;model&gt;.html
+4. positions/render/&lt;app&gt;&lt;combine_string&gt;&lt;model&gt;.html
+4. positions/render/&lt;position_name&gt;/default.html
+5. positions/render/default.html</pre>
+</div>
+<p><strong>Example List</strong>, before <tt class="docutils literal"><span class="pre">django.template.loader.select_template</span></tt> is called</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">u&#39;positions/render/home__opinion/stories__story__first.html&#39;</span><span class="p">,</span>
+ <span class="s">u&#39;positions/render/home__opinion/stories__story.html&#39;</span><span class="p">,</span>
+ <span class="s">u&#39;positions/render/stories__story.html&#39;</span><span class="p">,</span>
+ <span class="s">u&#39;positions/render/home__opinion/default.html&#39;</span><span class="p">,</span>
+ <span class="s">u&#39;positions/render/default.html&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div> 
+        </div>
+      </div>
+    <div class="footer">
+    <p>
+      &copy; Copyright 2011, The Washington Times.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.3.
+	</p>
+    </div>
+      <div class="clearer"></div>
+    </div>
+	<div id="breadcrumbs">
+		<a href="index.html" accesskey="U">Reference</a><img src="../_static/triangle_closed.png" height="9" width="9" alt="&gt;">
+		Rendering Content
+		</ul>
+	</div>
+	<script type="text/javascript" charset="utf-8" src="../_static/toc.js"></script>
+  </body>
+</html>

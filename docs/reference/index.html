@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -5,27 +6,28 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Reference &mdash; Django Kamasutra v0.1.6 documentation</title>
+    <title>Reference &mdash; Django Kamasutra v0.2.2 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.1.6',
-        COLLAPSE_MODINDEX: false,
+        VERSION:     '0.2.2',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Django Kamasutra v0.1.6 documentation" href="../index.html" />
+    <link rel="top" title="Django Kamasutra v0.2.2 documentation" href="../index.html" />
     <link rel="next" title="Template Tags" href="templatetags.html" />
     <link rel="prev" title="API" href="../api.html" /> 
   </head>
   <body>
 <div id="docstitle">
-	<p>Django Kamasutra v0.1.6 documentation</p>
+	<p>Django Kamasutra v0.2.2 documentation</p>
 </div>
 <div id="header">
 	<div id="title"><h1>Reference</h1></div>
@@ -43,12 +45,13 @@
   <div class="sphinxsidebarwrapper">
 	<ul><li class="toctree-l1"><a href="../index.html">Main Page</a></li></ul>
 	<ul class="current">
-<li class="toctree-l1"><a class="reference external" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference external" href="../getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference external" href="../api.html">API</a></li>
-<li class="toctree-l1 current"><a class="current reference external" href="">Reference</a><ul>
-<li class="toctree-l2"><a class="reference external" href="templatetags.html">Template Tags</a></li>
-<li class="toctree-l2"><a class="reference external" href="settings.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="templatetags.html">Template Tags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="render_content.html">Rendering Content</a></li>
 </ul>
 </li>
 </ul>
@@ -82,22 +85,28 @@
             
   <div class="section" id="reference">
 <h1>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference external" href="templatetags.html">Template Tags</a><ul>
-<li class="toctree-l2"><a class="reference external" href="templatetags.html#get-position">get_position</a></li>
-<li class="toctree-l2"><a class="reference external" href="templatetags.html#get-position-content">get_position_content</a></li>
-<li class="toctree-l2"><a class="reference external" href="templatetags.html#get-applicable-positions">get_applicable_positions</a></li>
-<li class="toctree-l2"><a class="reference external" href="templatetags.html#get-content-positions">get_content_positions</a></li>
-<li class="toctree-l2"><a class="reference external" href="templatetags.html#can-be-positioned">can_be_positioned</a></li>
+<li class="toctree-l1"><a class="reference internal" href="templatetags.html">Template Tags</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="templatetags.html#get-position">get_position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="templatetags.html#get-position-content">get_position_content</a></li>
+<li class="toctree-l2"><a class="reference internal" href="templatetags.html#get-applicable-positions">get_applicable_positions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="templatetags.html#get-content-positions">get_content_positions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="templatetags.html#can-be-positioned">can_be_positioned</a></li>
+<li class="toctree-l2"><a class="reference internal" href="templatetags.html#render-position-content">render_position_content</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="settings.html">Settings</a><ul>
-<li class="toctree-l2"><a class="reference external" href="settings.html#position-content-overlap-count">POSITION_CONTENT_OVERLAP_COUNT</a></li>
-<li class="toctree-l2"><a class="reference external" href="settings.html#position-combine-string">POSITION_COMBINE_STRING</a></li>
-<li class="toctree-l2"><a class="reference external" href="settings.html#position-templates">POSITION_TEMPLATES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html">Settings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#position-content-overlap-count">POSITION_CONTENT_OVERLAP_COUNT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#position-combine-string">POSITION_COMBINE_STRING</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="render_content.html">Rendering Content</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="render_content.html#templates">Templates</a></li>
 </ul>
 </li>
 </ul>
+</div>
 </div>
 
 
@@ -106,8 +115,8 @@
       </div>
     <div class="footer">
     <p>
-      &copy; Copyright 2009, The Washington Times.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+      &copy; Copyright 2011, The Washington Times.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.3.
 	</p>
     </div>
       <div class="clearer"></div>

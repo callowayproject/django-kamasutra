@@ -80,3 +80,4 @@ Retrieve your position content via templatetag
     
         {% get_position_content position as content as_content_type=False %}
         
+Read more about :ref:`position-templatetags`

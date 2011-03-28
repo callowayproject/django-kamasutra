@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -5,27 +6,29 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Settings &mdash; Django Kamasutra v0.1.6 documentation</title>
+    <title>Settings &mdash; Django Kamasutra v0.2.2 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.1.6',
-        COLLAPSE_MODINDEX: false,
+        VERSION:     '0.2.2',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Django Kamasutra v0.1.6 documentation" href="../index.html" />
+    <link rel="top" title="Django Kamasutra v0.2.2 documentation" href="../index.html" />
     <link rel="up" title="Reference" href="index.html" />
+    <link rel="next" title="Rendering Content" href="render_content.html" />
     <link rel="prev" title="Template Tags" href="templatetags.html" /> 
   </head>
   <body>
 <div id="docstitle">
-	<p>Django Kamasutra v0.1.6 documentation</p>
+	<p>Django Kamasutra v0.2.2 documentation</p>
 </div>
 <div id="header">
 	<div id="title"><h1>Settings</h1></div>
@@ -33,6 +36,7 @@
 		<li id="toc_button"><div class="headerButton"><a href="#">Table of Contents</a></div></li>
 		<li id="page_buttons">
 			<div class="headerButton"><a href="../genindex.html" title="General Index" accesskey="I">index</a></div>
+			<div class="headerButton"><a href="render_content.html" title="Rendering Content" accesskey="N">next</a></div>
 			<div class="headerButton"><a href="templatetags.html" title="Template Tags" accesskey="P">previous</a></div>
 		</li>
 	</ul>
@@ -42,12 +46,13 @@
   <div class="sphinxsidebarwrapper">
 	<ul><li class="toctree-l1"><a href="../index.html">Main Page</a></li></ul>
 	<ul class="current">
-<li class="toctree-l1"><a class="reference external" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference external" href="../getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference external" href="../api.html">API</a></li>
-<li class="toctree-l1 current"><a class="reference external" href="index.html">Reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference external" href="templatetags.html">Template Tags</a></li>
-<li class="toctree-l2 current"><a class="current reference external" href="">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="templatetags.html">Template Tags</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="render_content.html">Rendering Content</a></li>
 </ul>
 </li>
 </ul>
@@ -85,24 +90,14 @@
 <div class="section" id="position-content-overlap-count">
 <span id="setting-content-overlap-count"></span><h2>POSITION_CONTENT_OVERLAP_COUNT<a class="headerlink" href="#position-content-overlap-count" title="Permalink to this headline">¶</a></h2>
 <p>The number of objects to keep after the position has added more items then
-its position.count specified. Default is 2.</p>
+its position.count specified.</p>
+<p><strong>Default</strong> - 2.</p>
 </div>
 <div class="section" id="position-combine-string">
-<span id="setting-page-conbine-string"></span><h2>POSITION_COMBINE_STRING<a class="headerlink" href="#position-combine-string" title="Permalink to this headline">¶</a></h2>
-<p>When retrieving a position with a prefix, this value is used to combine
-the prefix and the name. Default is &#8216;__&#8217; (2 underscores).</p>
-</div>
-<div class="section" id="position-templates">
-<span id="setting-templates"></span><h2>POSITION_TEMPLATES<a class="headerlink" href="#position-templates" title="Permalink to this headline">¶</a></h2>
-<p>Dictionary of templates to be used when rendering a item.</p>
-<p>Example</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">POSITION_TEMPLATES</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&#39;stories.story&#39;</span><span class="p">:</span> <span class="s">&#39;customtemplates/positions/stories/story.html&#39;</span><span class="p">,</span>
-    <span class="s">&#39;blogs.blog&#39;</span><span class="p">:</span> <span class="s">&#39;blogs/positions/blog.html&#39;</span><span class="p">,</span>
-
-<span class="p">}</span>
-</pre></div>
-</div>
+<span id="setting-combine-string"></span><h2>POSITION_COMBINE_STRING<a class="headerlink" href="#position-combine-string" title="Permalink to this headline">¶</a></h2>
+<p>A url safe string used to combine position name prefix and suffix. This is
+also used to build template paths.</p>
+<p><strong>Default</strong> - __ (2 under scores)</p>
 </div>
 </div>
 
@@ -112,8 +107,8 @@ the prefix and the name. Default is &#8216;__&#8217; (2 underscores).</p>
       </div>
     <div class="footer">
     <p>
-      &copy; Copyright 2009, The Washington Times.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+      &copy; Copyright 2011, The Washington Times.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.3.
 	</p>
     </div>
       <div class="clearer"></div>

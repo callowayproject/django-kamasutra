@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -5,28 +6,29 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Template Tags &mdash; Django Kamasutra v0.1.6 documentation</title>
+    <title>Template Tags &mdash; Django Kamasutra v0.2.2 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.1.6',
-        COLLAPSE_MODINDEX: false,
+        VERSION:     '0.2.2',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Django Kamasutra v0.1.6 documentation" href="../index.html" />
+    <link rel="top" title="Django Kamasutra v0.2.2 documentation" href="../index.html" />
     <link rel="up" title="Reference" href="index.html" />
     <link rel="next" title="Settings" href="settings.html" />
     <link rel="prev" title="Reference" href="index.html" /> 
   </head>
   <body>
 <div id="docstitle">
-	<p>Django Kamasutra v0.1.6 documentation</p>
+	<p>Django Kamasutra v0.2.2 documentation</p>
 </div>
 <div id="header">
 	<div id="title"><h1>Template Tags</h1></div>
@@ -44,12 +46,13 @@
   <div class="sphinxsidebarwrapper">
 	<ul><li class="toctree-l1"><a href="../index.html">Main Page</a></li></ul>
 	<ul class="current">
-<li class="toctree-l1"><a class="reference external" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference external" href="../getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference external" href="../api.html">API</a></li>
-<li class="toctree-l1 current"><a class="reference external" href="index.html">Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference external" href="">Template Tags</a></li>
-<li class="toctree-l2"><a class="reference external" href="settings.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="">Template Tags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="render_content.html">Rendering Content</a></li>
 </ul>
 </li>
 </ul>
@@ -99,7 +102,7 @@
 <span class="cp">{%</span> <span class="k">get_position</span> <span class="nv">prefix</span> <span class="nv">name</span> <span class="k">as</span> <span class="nv">varname</span> <span class="nv">slugify</span><span class="o">=</span><span class="kp">True</span> <span class="cp">%}</span><span class="x"></span>
 </pre></div>
 </div>
-<p>The second example will conbine the prefix with <tt class="docutils literal"><span class="pre">settings.PAGE_CONBINE_STRING</span></tt> and the name given.</p>
+<p>The second example will combine the prefix with <a class="reference internal" href="settings.html#setting-combine-string"><em>POSITION_COMBINE_STRING</em></a> and the name given.</p>
 <p>The name can also be variables</p>
 <div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">get_position</span> <span class="nv">category.name</span> <span class="nv">someobject.name</span> <span class="k">as</span> <span class="nv">my_position</span> <span class="cp">%}</span><span class="x"></span>
 </pre></div>
@@ -153,17 +156,12 @@ returned.</p>
 <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
 </pre></div>
 </div>
-<p>If we don&#8217;t have the object available, such as in the admin, we can specify the content type id and object id.</p>
-<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">get_applicable_positions</span> <span class="nv">content_type_id</span> <span class="nv">object_id</span> <span class="k">as</span> <span class="nv">myobj_applicable_postions</span> <span class="cp">%}</span><span class="x"></span>
-<span class="cp">{%</span> <span class="k">get_applicable_positions</span> <span class="m">21</span> <span class="m">3</span> <span class="k">as</span> <span class="nv">myobj_applicable_postions</span> <span class="cp">%}</span><span class="x"></span>
-</pre></div>
-</div>
 </blockquote>
 </div>
 <div class="section" id="get-content-positions">
 <h2>get_content_positions<a class="headerlink" href="#get-content-positions" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<p>Gets a <a class="reference external" href="../api.html#api-position"><em>Position</em></a> list that the spcified object is currently in.</p>
+<p>Gets a <a class="reference internal" href="../api.html#api-position"><em>Position</em></a> list that the specified object is currently in.</p>
 <p><strong>Syntax</strong>:</p>
 <div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">get_content_positions</span> <span class="nv">object</span> <span class="k">as</span> <span class="nv">positions</span> <span class="cp">%}</span><span class="x"></span>
 <span class="cp">{%</span> <span class="k">get_content_positions</span> <span class="nv">content_type_id</span> <span class="nv">object_id</span> <span class="k">as</span> <span class="nv">positions</span> <span class="cp">%}</span><span class="x"></span>
@@ -188,11 +186,27 @@ returned.</p>
 <span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="x"></span>
 </pre></div>
 </div>
-<p>If we don&#8217;t have the object available, such as in the admin, we can specify the content type id and object id.</p>
-<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">can_be_positioned</span> <span class="nv">content_type_id</span> <span class="nv">object_id</span> <span class="k">as</span> <span class="nv">myobj_canbe_positioned</span> <span class="cp">%}</span><span class="x"></span>
-<span class="cp">{%</span> <span class="k">can_be_positioned</span> <span class="m">21</span> <span class="m">3</span> <span class="k">as</span> <span class="nv">myobj_canbe_positioned</span> <span class="cp">%}</span><span class="x"></span>
+</blockquote>
+</div>
+<div class="section" id="render-position-content">
+<span id="id1"></span><h2>render_position_content<a class="headerlink" href="#render-position-content" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<p>Renders the content, same as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">PositionContent</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 </pre></div>
 </div>
+<p><strong>Syntax</strong>:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">render_position_content</span> <span class="o">[</span><span class="nv">PositionContent</span><span class="o">]</span> <span class="o">[</span><span class="k">with</span><span class="o">]</span> <span class="o">[</span><span class="nv">suffix</span><span class="o">=</span><span class="nv">S</span><span class="o">]</span> <span class="o">[</span><span class="nv">template</span><span class="o">=</span><span class="nv">T</span><span class="o">]</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p><strong>Example</strong>:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">render_position_content</span> <span class="nv">pc</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">render_position_content</span> <span class="nv">pc</span> <span class="k">with</span> <span class="nv">suffix</span><span class="o">=</span><span class="nv">custom</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">render_position_content</span> <span class="nv">pc</span> <span class="k">with</span> <span class="nv">template</span><span class="o">=</span><span class="nv">mycustomtemplates</span><span class="o">/</span><span class="nv">positions</span><span class="o">/</span><span class="nv">custom.html</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>The optional arguments [suffix] and [template] can only be used separately, not in combination of each other</p>
+<p>Read more about rendering content, <a class="reference internal" href="render_content.html#render-content"><em>Rendering Content</em></a></p>
 </blockquote>
 </div>
 </div>
@@ -203,8 +217,8 @@ returned.</p>
       </div>
     <div class="footer">
     <p>
-      &copy; Copyright 2009, The Washington Times.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+      &copy; Copyright 2011, The Washington Times.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.3.
 	</p>
     </div>
       <div class="clearer"></div>

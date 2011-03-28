@@ -12,33 +12,20 @@ POSITION_CONTENT_OVERLAP_COUNT
 ==============================
 
 The number of objects to keep after the position has added more items then 
-its position.count specified. Default is 2.
+its position.count specified. 
 
-.. _setting_page_conbine_string:
+**Default** - 2.
+
+.. _setting_combine_string:
 
 =======================
 POSITION_COMBINE_STRING
 =======================
 
-When retrieving a position with a prefix, this value is used to combine 
-the prefix and the name. Default is '__' (2 underscores).
+A url safe string used to combine position name prefix and suffix. This is 
+also used to build template paths.
 
-.. _setting_templates:
+**Default** - __ (2 under scores)
 
-==================
-POSITION_TEMPLATES
-==================
-
-Dictionary of templates to be used when rendering a item.
-
-Example
-
-.. code-block:: python
-
-    POSITION_TEMPLATES = {
-        'stories.story': 'customtemplates/positions/stories/story.html',
-        'blogs.blog': 'blogs/positions/blog.html',
-    
-    }
 
  

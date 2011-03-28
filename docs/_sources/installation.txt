@@ -2,7 +2,14 @@
 Installation
 ============
 
-Get the app `here <http://opensource.washingtontimes.com/projects/django-kamasutra/>`_
+Using PIP::
+
+	pip install django-kamasutra
+	
+or download the app `here <http://pypi.python.org/pypi/django-kamasutra/>`_ ::
+
+	python setup.py install
+
 
 Add **positions** to your settings **INSTALLED_APPS**::
 

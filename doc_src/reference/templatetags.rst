@@ -25,7 +25,7 @@ get_position
         
         {% get_position prefix name as varname slugify=True %}
         
-    The second example will conbine the prefix with ``settings.PAGE_CONBINE_STRING`` and the name given.
+    The second example will combine the prefix with :ref:`setting_combine_string` and the name given.
     
     The name can also be variables
     
@@ -97,19 +97,12 @@ get_applicable_positions
             {{ position.name }}<br/>
         {% endfor %}
         
-    If we don't have the object available, such as in the admin, we can specify the content type id and object id.
-    
-    .. code-block:: django
-    
-        {% get_applicable_positions content_type_id object_id as myobj_applicable_postions %}
-        {% get_applicable_positions 21 3 as myobj_applicable_postions %}
-        
         
 =====================
 get_content_positions
 =====================
 
-    Gets a :ref:`api_position` list that the spcified object is currently in.
+    Gets a :ref:`api_position` list that the specified object is currently in.
     
     **Syntax**:
     
@@ -141,10 +134,32 @@ can_be_positioned
         {% if myobj_canbe_positioned %}
             {{ myobj }} can be positioned
         {% endif %}
-        
-    If we don't have the object available, such as in the admin, we can specify the content type id and object id.
-    
-    .. code-block:: django
-    
-        {% can_be_positioned content_type_id object_id as myobj_canbe_positioned %}
-        {% can_be_positioned 21 3 as myobj_canbe_positioned %}
+
+.. _render_position_content:
+
+=======================
+render_position_content
+=======================
+
+	Renders the content, same as::
+	
+		PositionContent.render()
+	
+	**Syntax**:
+	
+	.. code-block:: django
+		
+		{% render_position_content [PositionContent] [with] [suffix=S] [template=T] %}
+
+		
+	**Example**:
+	
+	.. code-block:: django
+	
+		{% render_position_content pc %}
+		{% render_position_content pc with suffix=custom %}
+		{% render_position_content pc with template=mycustomtemplates/positions/custom.html %}
+		
+	The optional arguments [suffix] and [template] can only be used separately, not in combination of each other
+	
+	Read more about rendering content, :ref:`render_content`

@@ -11,3 +11,4 @@ Reference
    
    templatetags
    settings
+   render_content

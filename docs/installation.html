@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -5,27 +6,28 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Installation &mdash; Django Kamasutra v0.1.6 documentation</title>
+    <title>Installation &mdash; Django Kamasutra v0.2.2 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.1.6',
-        COLLAPSE_MODINDEX: false,
+        VERSION:     '0.2.2',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Django Kamasutra v0.1.6 documentation" href="index.html" />
+    <link rel="top" title="Django Kamasutra v0.2.2 documentation" href="index.html" />
     <link rel="next" title="Getting Started" href="getting_started.html" />
     <link rel="prev" title="Welcome to Django Kamasutra’s documentation!" href="index.html" /> 
   </head>
   <body>
 <div id="docstitle">
-	<p>Django Kamasutra v0.1.6 documentation</p>
+	<p>Django Kamasutra v0.2.2 documentation</p>
 </div>
 <div id="header">
 	<div id="title"><h1>Installation</h1></div>
@@ -43,10 +45,10 @@
   <div class="sphinxsidebarwrapper">
 	<ul><li class="toctree-l1"><a href="index.html">Main Page</a></li></ul>
 	<ul class="current">
-<li class="toctree-l1 current"><a class="current reference external" href="">Installation</a></li>
-<li class="toctree-l1"><a class="reference external" href="getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference external" href="api.html">API</a></li>
-<li class="toctree-l1"><a class="reference external" href="reference/index.html">Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
 </ul>
 
     <div id="searchbox" style="display: none">
@@ -78,7 +80,12 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<p>Get the app <a class="reference external" href="http://opensource.washingtontimes.com/projects/django-kamasutra/">here</a></p>
+<p>Using PIP:</p>
+<div class="highlight-python"><pre>pip install django-kamasutra</pre>
+</div>
+<p>or download the app <a class="reference external" href="http://pypi.python.org/pypi/django-kamasutra/">here</a></p>
+<div class="highlight-python"><pre>python setup.py install</pre>
+</div>
 <p>Add <strong>positions</strong> to your settings <strong>INSTALLED_APPS</strong>:</p>
 <div class="highlight-python"><pre>INSTALLED_APPS = (
     ...
@@ -98,8 +105,8 @@
       </div>
     <div class="footer">
     <p>
-      &copy; Copyright 2009, The Washington Times.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+      &copy; Copyright 2011, The Washington Times.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.3.
 	</p>
     </div>
       <div class="clearer"></div>

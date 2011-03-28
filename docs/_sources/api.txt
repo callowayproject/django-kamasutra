@@ -38,6 +38,8 @@ order              IntegerField        default=1
 add_date           DateTimeField       default=default=datetime.datetime.now
 =================  ==================  =============================================================
 
+.. _api_positioncontent_functions:
+
 Functions
 ~~~~~~~~~
 
