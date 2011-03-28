@@ -6,7 +6,5 @@ recursive-include doc_src *.rst *.html *.css *.js *.png *.gif
 recursive-include docs *.html *.css *.js *.png *.gif
 
 recursive-include positions *.py
-recursive-include positions/templates/ *.html
+recursive-include templates *.html
 recursive-include fixtures *.json
-
-prune example

@@ -1,5 +1,5 @@
 from django.db.models import get_model
-from django.template import Library, Node, TemplateSyntaxError, Variable, resolve_variable, VariableDoesNotExist
+from django.template import Library, Node, TemplateSyntaxError, Variable, VariableDoesNotExist
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
 from django.contrib.contenttypes.models import ContentType
@@ -21,10 +21,16 @@ def _parse_arguments(value):
             
     return ret
 
-def my_resolve(value, context):
+def resolve_variable(value, context, none_on_fail=False):
+    """
+    A wrapper function to resolve template variables. 
+    Will return None if [none_on_fail] is [True], otherwise
+    it will return [value]
+    """
     try:
         return Variable(value).resolve(context)
-    except VariableDoesNotExist:
+    except Exception:
+        if none_on_fail: return None
         return value
 
 class PositionContentNode(Node):
@@ -35,26 +41,13 @@ class PositionContentNode(Node):
         self.as_contenttype = True
         if str(kwargs.get('as_contenttype', 'True')).lower() == 'false':
             self.as_contenttype = False
-        
-    def render_old(self, context):
-        pos = None
-        try:
-            pos = Variable(self.position).resolve(context)
-        except:
-            try:
-                pos = Position.objects.get(name__iexact=self.position)
-            except:
-                return ""
-        
-        objects = Position.objects.get_content(position=pos, count=self.limit, as_contenttype=self.as_contenttype)
-        context[self.varname] = objects
-        return ""
     
     def render(self, context):
-        pos = my_resolve(self.position, context)
-        
-        objects = Position.objects.get_content(position=pos, count=self.limit, as_contenttype=self.as_contenttype)
-        context[self.varname] = objects
+        pos = resolve_variable(self.position, context)
+        context[self.varname] = Position.objects.get_content(
+            position=pos, 
+            count=self.limit, 
+            as_contenttype=self.as_contenttype)
         return ""
     
 
@@ -64,21 +57,10 @@ class ApplicablePositionsNode(Node):
         (self.content_type_id, self.object_id) = (content_type_id, object_id)
     
     def render(self, context):
-        obj = None
-        try:
-            obj = Variable(self.obj).resolve(context)
-        except:
-            pass
-            
-        try:
-            content_type_id = Variable(self.content_type_id).resolve(context)
-        except:
-            pass
-
-        try:
-            object_id = Variable(self.object_id).resolve(context)
-        except:
-            pass
+                
+        obj = resolve_variable(self.obj, context, none_on_fail=True)
+        content_type_id = resolve_variable(self.content_type_id, context)
+        object_id = resolve_variable(self.object_id, context)
             
         if not obj:
             try:
@@ -87,13 +69,9 @@ class ApplicablePositionsNode(Node):
             except:
                 pass
 
-        context[self.varname] = []
-        try:
-            context[self.varname] = Position.objects.get_applicable(obj, self.return_all)
-        except:
-            pass
+        context[self.varname] = Position.objects.get_applicable(obj, self.return_all)
         
-        return ""  
+        return "" 
         
 
 class ContentPositionsNode(Node):
@@ -102,21 +80,10 @@ class ContentPositionsNode(Node):
         (self.content_type_id, self.object_id) = (content_type_id, object_id)
     
     def render(self, context):
-        obj = None
-        try:
-            obj = Variable(self.obj).resolve(context)
-        except:
-            pass
         
-        try:
-            content_type_id = Variable(self.content_type_id).resolve(context)
-        except:
-            pass
-            
-        try:
-            object_id = Variable(self.object_id).resolve(context)
-        except:
-            pass
+        obj = resolve_variable(self.obj, context, none_on_fail=True)
+        content_type_id = resolve_variable(self.content_type_id, context)
+        object_id = resolve_variable(self.object_id, context)
             
         if not obj:
             try:
@@ -140,23 +107,18 @@ class PositionNode(Node):
             self.slugify = True
         
     def render(self, context):
-        try:
-            self.name = Variable(self.name).resolve(context)
-            if self.slugify:
-                self.name = slugify(self.name)
-        except:
-            pass
+        
+        name = resolve_variable(self.name, context)
+        if self.slugify:
+            name = slugify(name)
             
-        try:
-            self.prefix = Variable(self.prefix).resolve(context)
-            if self.slugify:
-                self.prefix = slugify(self.prefix)
-        except:
-            pass
+        prefix = resolve_variable(self.prefix, context)
+        if self.slugify:
+            prefix = slugify(prefix)
             
-        s_name = self.name
-        if self.prefix:
-            s_name = '%s%s%s' % (self.prefix, position_settings.CONBINE_STRING, self.name)
+        s_name = name
+        if prefix:
+            s_name = '%s%s%s' % (prefix, position_settings.CONBINE_STRING, name)
         
         context[self.varname] = None
         try:
@@ -176,13 +138,11 @@ class RenderPositionContentNode(Node):
         
     def render(self, context):
         suffix, template = self.suffix, self.template
-        try:
-            pc = Variable(self.pc).resolve(context)
-            if not isinstance(pc, PositionContent):
-                return None
-        except:
-            return None
         
+        pc = resolve_variable(self.pc, context)
+        if not isinstance(pc, PositionContent):
+            return None
+            
         tpl = pc.render(template=template, suffix=suffix, 
             context_instance=context)
                         
@@ -195,21 +155,10 @@ class CanBePositionedNode(Node):
         self.object_id, self.varname = object_id, varname
         
     def render(self, context):
-        obj = None
-        try:
-            obj = Variable(self.obj).resolve(context)
-        except:
-            pass
         
-        try:
-            content_type_id = Variable(self.content_type_id).resolve(context)
-        except:
-            pass
-            
-        try:
-            object_id = Variable(self.object_id).resolve(context)
-        except:
-            pass
+        obj = resolve_variable(self.obj, context, none_on_fail=True)
+        content_type_id = resolve_variable(self.content_type_id, context)
+        object_id = resolve_variable(self.object_id, context)
             
         if not obj:
             try:

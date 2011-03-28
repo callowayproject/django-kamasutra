@@ -1,11 +1,11 @@
 import datetime
 from django.db import models
-from django.db.models import Count, F, Q
+from django.db.models import Q
 from django.utils.translation import ugettext as _
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
-from django.template.loader import select_template, render_to_string
-from django.template import Context, RequestContext
+from django.template.loader import select_template
+from django.template import Context
 
 from positions import settings
 
@@ -62,52 +62,44 @@ class PositionManager(models.Manager):
         
         return True
     
-    def get_content_old(self, position, count=None, as_contenttype=True):
-        """
-        Gets the content for the position given.
-        """
-        if not isinstance(position, Position):
-            return []
-        
-        # Get the number of items that are going to be returned.
-        num = position.count
-        if isinstance(count, int) and count > 0:
-            num = count
-        
-        # Get the items
-        items = PositionContent._default_manager.filter(
-            position=position).order_by('order')[:num]
-            
-        # If supplied, return the content objects for each item.
-        if as_contenttype:
-            items = [item.content_object for item in items if item.content_object]
-        
-        return items
-    
     def get_content(self, position, count=None, as_contenttype=True):
+        """
+        Retreives the content a supplied position contains.
+        """
         items = []
         if isinstance(position, basestring):
             items = PositionContent._default_manager.filter(
-                position__name__iexact=position).select_related().order_by('order')
+                position__name__iexact=position).select_related(
+                    ).order_by('order')
         elif isinstance(position, Position):
             items = PositionContent._default_manager.filter(
                 position=position).select_related().order_by('order')
         
-        if count:
-            items = items[:count]
+        # If items is empty return an empty list
+        if not items:
+            return []
             
-        # If supplied, return the content objects for each item.
+        # Get the position, this is a way around making a
+        # another query to get the position.
+        pos = items[0].position
+            
+        # If [as_contenttype] is [True], return the content objects 
+        # for each item, instead of the [PositionContent] instances
         if as_contenttype:
             ctypes = {}
-            items = []
+            tmp_items = []
             for item in items:
-                if item.content_type_id not in ctype:
-                    ctype[item.content_type] = []
-                ctype[item.content_type].append(item.object_id)
+                if item.content_type not in ctypes:
+                    ctypes[item.content_type] = []
+                    ctypes[item.content_type].append(item.object_id)
             for ctype, object_ids in ctypes.items():
-                items.extend(ctype.model_class().filter(pk__in=object_ids))
+                tmp_items.extend(
+                    ctype.model_class().objects.filter(pk__in=object_ids))
+            items = tmp_items
+            
+        num = count or pos.count
         
-        return items
+        return items[:num]
     
     def contains_object(self, position, obj):
         """
@@ -185,6 +177,9 @@ class PositionManager(models.Manager):
         
 
 class Position(models.Model):
+    """
+    Name and detail for positions.
+    """
     name = models.SlugField(_('Name (slug)'), unique=True,
         help_text=_('Name of the location, must only contain alpha numeric characters.'))
     count = models.PositiveIntegerField(_('Count'), default=1,
@@ -221,7 +216,8 @@ class PositionContentManager(models.Manager):
             
             # Retrieve all the ids of PositionContent after the 
             # position.count + CONTENT_OVERMAP_COUNT
-            ids = [i.pk for i in items[(position.count + settings.CONTENT_OVERLAP_COUNT):]]
+            ids = [i.pk for i in items[
+                (position.count + settings.CONTENT_OVERLAP_COUNT):]]
             
             # Remove, if any, the items left over.
             if ids:
@@ -255,60 +251,76 @@ class PositionContent(models.Model):
     """
     position = models.ForeignKey(Position, verbose_name=_('Position'), 
         help_text=_('The position where this object will be shown.'))
-    content_type = models.ForeignKey(ContentType, verbose_name=_('Content Type.'),
+    content_type = models.ForeignKey(ContentType, 
+        verbose_name=_('Content Type.'),
         help_text=_('Type of this object.'))
     object_id = models.CharField(_('Object ID'), max_length=255, 
         help_text=_('The ID/PK of the object.'))
     content_object = generic.GenericForeignKey('content_type', 'object_id')
     order = models.PositiveIntegerField(_('Order'), default=1,
         help_text=_('The order of the object.'))
-    add_date = models.DateTimeField(_('Date Added'), default=datetime.datetime.now)
+    add_date = models.DateTimeField(_('Date Added'), 
+        default=datetime.datetime.now)
     
     objects = PositionContentManager()
     
     class Meta:
         ordering = ['position__name', 'order', '-add_date']
     
-    def render(self, template=None, suffix=None, extra_context={}, context_instance=None):
+    def render(self, template=None, suffix=None, extra_context={}, 
+        context_instance=None):
         """
         Render the content using template search in the following order:
         
-        1. Passed template
-        2. positions/render/<position>/<app>__<model>__<suffix>.html
-        3. positions/render/<position>/<app>__<model>.html
-        4. POSITION_TEMPLATES setting for content type or 
-           positions/render/<app>__<model>.html
-        5. positions/render/default.html
+        1. Supplied template
+        2. positions/render/<position>/<app><combine_string><model><combine_string><suffix>.html
+        3. positions/render/<position>/<app><combine_string><model>.html
+        4. positions/render/<app><combine_string><model>.html
+        5. positions/render/<position>/default.html
+        6. positions/render/default.html
         """
         t, model, app = None, "", ""
         
         model = self.content_type.model.lower()
         app = self.content_type.app_label.lower()
-        pos_tmpl_path = 'positions/render/%s/' % self.position.name
+        
+        # The default render template path
+        default_tmpl_path = 'positions/render/%s'
+        # The supplied position template path
+        pos_tmpl_path =  default_tmpl_path % self.position.name + '/'
+        # The default template
+        default_tmpl = u'default.html'
         
         template_list = []
         if template:
             template_list.append(template)
+            
         if suffix:
-            tmpl_name = '%s__%s__%s.html' % (app, model, suffix)
+            tmpl_name = '%s%s%s%s%s.html' % (app, settings.CONBINE_STRING, 
+                model, settings.CONBINE_STRING, suffix)
             template_list.append("".join([pos_tmpl_path, tmpl_name]))
             
-        tmpl_name = '%s__%s.html' % (app, model)
+        # set the content type template name
+        tmpl_name = '%s%s%s.html' % (app, settings.CONBINE_STRING, model)
+            
+        # position_name + content type template
         template_list.append("".join([pos_tmpl_path, tmpl_name]))
         
-        tmpl_name = 'positions/render/%s' % tmpl_name
-        template_list.append(
-            settings.TEMPLATES.get('%s.%s' % (app, model), tmpl_name))
+        # default path + content type template
+        template_list.append("".join([default_tmpl_path % tmpl_name]))
         
-        tmpl_name = "default.html"
-        template_list.append("".join([pos_tmpl_path, tmpl_name]))
-        template_list.append('positions/render/default.html')
+        # position name + default template
+        template_list.append("".join([pos_tmpl_path, default_tmpl]))
+        
+        # default path + default template
+        template_list.append(default_tmpl_path % default_tmpl)
         
         t = select_template(template_list)
-        if not t: return None
+        if not t: 
+            return None
         
         context = Context()
-        if context_instance: # and isinstance(context_instance, RequestContext):
+        if context_instance:
             context.update(context_instance.__dict__)
             
         context.update({'obj': self.content_object, 'content': self})
