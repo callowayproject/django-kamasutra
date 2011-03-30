@@ -91,7 +91,7 @@ class PositionManager(models.Manager):
             for item in items:
                 if item.content_type not in ctypes:
                     ctypes[item.content_type] = []
-                    ctypes[item.content_type].append(item.object_id)
+                ctypes[item.content_type].append(item.object_id)
             for ctype, object_ids in ctypes.items():
                 tmp_items.extend(
                     ctype.model_class().objects.filter(pk__in=object_ids))
