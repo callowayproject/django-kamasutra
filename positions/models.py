@@ -82,23 +82,37 @@ class PositionManager(models.Manager):
         # Get the position, this is a way around making a
         # another query to get the position.
         pos = items[0].position
-            
+        
         # If [as_contenttype] is [True], return the content objects 
         # for each item, instead of the [PositionContent] instances
         if as_contenttype:
-            ctypes = {}
-            tmp_items = []
+            ctypes, tmp_dict = {}, {}
+            # Build a list of object_id's by content type
             for item in items:
                 if item.content_type not in ctypes:
                     ctypes[item.content_type] = []
                 ctypes[item.content_type].append(item.object_id)
+            
+            ctype_key = "%s_%s_%s"
             for ctype, object_ids in ctypes.items():
-                tmp_items.extend(
-                    ctype.model_class().objects.filter(pk__in=object_ids))
-            items = tmp_items
+                # Retreive all the objects by content type
+                qs = ctype.model_class().objects.filter(pk__in=object_ids)
+                
+                # Build a temp dictionary so we can order the items 
+                # correctly later on.
+                tmp_dict.update(dict([(ctype_key % (
+                    ctype.app_label, 
+                    ctype.model, 
+                    str(item.pk)), item) for item in qs]))
+                        
+            # Loop all the items, which is in the correct order we expect,
+            # and retreive the item from our temp dictionary
+            items = [tmp_dict[ctype_key % (
+                i.content_type.app_label, 
+                i.content_type.model, 
+                str(i.object_id))] for i in items]
             
         num = count or pos.count
-        
         return items[:num]
     
     def contains_object(self, position, obj):
