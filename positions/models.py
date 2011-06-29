@@ -122,8 +122,9 @@ class PositionManager(models.Manager):
         ctype = ContentType.objects.get_for_model(obj)
         
         try:
-            position.positioncontent_set.get(
-                content_type__pk=ctype.pk, 
+            PositionContent._default_manager.get(
+                position=position,
+                content_type__pk=ctype.pk,
                 object_id=str(obj.pk))
         except PositionContent.DoesNotExist:
             return False
@@ -139,7 +140,7 @@ class PositionManager(models.Manager):
             
         ctype = ContentType.objects.get_for_model(obj)
         
-        return Position.objects.filter(
+        return self.filter(
             positioncontent__content_type__pk=ctype.pk, 
             positioncontent__object_id=str(obj.pk)).distinct()
 
