@@ -163,13 +163,20 @@ class PositionsTestCase(TestCase):
         
         self.assertTrue(len(pc2), 4)
         
+        # Here will ensure the order is preserved when getting the content type
+        pc3 = Position.objects.get_content(self.samplePosition, as_contenttype=False)
+        pc4 = Position.objects.get_content(self.samplePosition)
+        
+        for count, item in enumerate(pc3):
+            self.assertTrue(item.content_object, pc4[count])
+        
         # Test returning the PositionContent instances enstead 
         # of the content object instance
-        pc3 = Position.objects.get_content(self.samplePosition, as_contenttype=False)
+        pc5 = Position.objects.get_content(self.samplePosition, as_contenttype=False)
         
-        for item in pc3:
+        for item in pc5:
             self.assertTrue(isinstance(item, PositionContent))
-            
+        
     def testContainsObject(self):
         """
         This test will ensure that contains_object works correctly
