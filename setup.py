@@ -2,24 +2,32 @@ import os
 from setuptools import setup
 import positions
 
+version = positions.__version__
+
 try:
-    reqs = open(os.path.join(os.path.dirname(__file__),'requirements.txt')).read()
-except (IOError, OSError):
+    f = open('README.rst')
+    long_desc = f.read()
+    f.close()
+except:
+    long_desc = ""
+
+try:
+    reqs = open('requirements.txt').read()
+except:
     reqs = ''
     
 setup(name='django-kamasutra',
-      version=positions.get_version(),
+      version=version,
       description='A application to position objects anywhere on a page.',
+      long_description=long_desc,
       author='Jose Soares',
       author_email='josefsoares@gmail.com',
-      url='http://github.com/josesoa/django-kamasutra/',
-      packages=['positions', 'positions.templatetags'],
+      url='https://github.com/callowayproject/django-kamasutra',
+      packages=['positions'],
       include_package_data = True,
       install_requires = reqs,
       classifiers=['Framework :: Django',
           'License :: OSI Approved :: Apache Software License',
-          'Development Status :: 4 - Beta',
-          'Environment :: Other Environment',
           'Programming Language :: Python',
           ],
       )
