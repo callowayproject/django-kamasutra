@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from django.core.cache import cache
 
 try:
-    import simplejson
+    from django.utils import simplejson
 except ImportError:
     simplejson = None
 
@@ -33,7 +33,7 @@ def index(request):
     """
     This is a dummy view so we can reverse the root url
     """
-    return Http404
+    raise Http404
     
 
 def json_data(request, content_type_id, object_id):
@@ -41,13 +41,13 @@ def json_data(request, content_type_id, object_id):
     This is used for the admin widget
     """
     if not simplejson:
-        return Http404
+        raise Http404
         
     ctype = get_object_or_404(ContentType, pk=content_type_id)
     try:
         obj = ctype.get_object_for_this_type(id=object_id)
     except:
-        return Http404
+        raise Http404
     
     positions = Position.objects.get_applicable(obj)
     
