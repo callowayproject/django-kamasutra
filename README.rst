@@ -33,6 +33,14 @@ Add **positions** to your settings **INSTALLED_APPS**::
         ...
     )
     
+Add **positions** to your URLS::
+
+    import positions.urls
+
+    urlpatterns += patterns('',
+        url(r'^positions/', include(positions.urls)),
+    )
+
 Run syncdb::
 
     >>> ./manage.py syncdb
