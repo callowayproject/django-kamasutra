@@ -8,7 +8,8 @@ from django.template import RequestContext
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
-
+from django.contrib.admin.models import ADDITION, DELETION, CHANGE, LogEntry
+from django.utils.encoding import force_unicode
 try:
     from django.utils import simplejson
 except ImportError:
@@ -66,9 +67,11 @@ def add(request, position_name, type, id):
     if position not in Position.objects.get_applicable(obj):
         return HttpResponseForbidden("The object cannot be added to this position.")
     
-    Position.objects.add_object(position, obj)
-    
+    added_successfully = Position.objects.add_object(position, obj)
+    if added_successfully:
+        update_histories(request, obj, position, ADDITION)
     return HttpResponseRedirect(get_admin_url(obj))
+
 add = staff_member_required(add)
 
 def remove(request, position_name, type, id):
@@ -82,7 +85,9 @@ def remove(request, position_name, type, id):
     ctype = get_object_or_404(ContentType, pk=type)
     obj = ctype.get_object_for_this_type(id=id)
     
-    Position.objects.remove_object(position=position, obj=obj)
+    removed_successfully = Position.objects.remove_object(position=position, obj=obj)
+    if removed_successfully:
+        update_histories(request, obj, position, DELETION)
     
     if not next:
         next = get_admin_url(obj)
@@ -98,15 +103,23 @@ def order_content(request, position_id, template_name='admin/positions/order.htm
     if request.method == 'POST':
         if 'cancel' in request.POST:
             return HttpResponseRedirect('/%s/positions/position/' % reverse("admin:index"))
+        
+        re_order = False
         for content in position.positioncontent_set.all():
+            original_order = content.order
             form = PositionContentOrderForm(request.POST, instance=content, prefix=str(content.pk))
             forms.append(form)
             if form.is_valid():
                 if form.cleaned_data['order'] >= 0:
+                    if form.cleaned_data['order'] != original_order:
+                        re_order = True
                     form.save()
                 else:
+                    obj = form.instance
+                    update_histories(request, obj.content_object, position, DELETION)
                     form.instance.delete()
-            
+        if re_order:
+            update_position_history(request, None, position, CHANGE, "Position content was re-ordered.")
         return HttpResponseRedirect('.')       
     else:
         for content in position.positioncontent_set.all():
@@ -126,5 +139,56 @@ def order_content(request, position_id, template_name='admin/positions/order.htm
 order_content = staff_member_required(order_content)
 order_content = never_cache(order_content)
     
+def update_histories(request, obj, position, action):
+    """ Update both object history and posistion history """
+    update_object_history(request, obj, position, action)
+    update_position_history(request, obj, position, action)
     
+def update_object_history(request, obj, position, action, message=None):
+    """ Update object history if turned on """
+    if not position_settings.UPDATE_OBJECT_HISTORY:
+        return
+    
+    if not message:
+        if action == ADDITION:
+            action_message = 'added'
+        elif action == DELETION:
+            action_message = 'removed'
+        else:
+            action_message = 'changed'
+        message = 'Position %s was %s. ' %(position, action_message)
+        
+    LogEntry.objects.log_action(
+        user_id         = request.user.pk, 
+        content_type_id = ContentType.objects.get_for_model(obj).pk,
+        object_id       = obj.pk,
+        object_repr     = force_unicode(obj), 
+        action_flag     = action,
+        change_message  = message
+    )
+    
+def update_position_history(request, obj, position, action, message=None):
+    """ Update position history if turned on """
+    if not position_settings.UPDATE_POSITION_HISTORY:
+        return
+    
+    if obj and not message:
+        if action == ADDITION:
+            action_message = 'added'
+        elif action == DELETION:
+            action_message = 'removed'
+        else:
+            action_message = 'changed'
+        message = 'Position Content %s was %s.' %(obj, action_message)
+        
+    if not message:
+        "Empty message."
+        
+    LogEntry.objects.log_action(
+        user_id         = request.user.pk, 
+        content_type_id = ContentType.objects.get_for_model(position).pk,
+        object_id       = position.pk,
+        object_repr     = force_unicode(position), 
+        action_flag     = action,
+        change_message  = message)
     
