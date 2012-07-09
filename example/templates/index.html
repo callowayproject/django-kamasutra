@@ -1,0 +1,50 @@
+{% load renderit_tags %}
+
+<h1>{{ main_user }}</h1>
+{% renderit main_user %}
+
+<hr/>
+{% renderit main_user as myuservar %}
+
+<hr/>
+
+{% renderit main_user with varname as varname %}
+
+<hr/>
+
+{% renderit int_value something %}
+
+<hr/>
+
+{% renderit float_value with prefix=one %}
+
+<hr/>
+
+{% renderit string_value something with group=two %}
+
+<hr/>
+
+{% renderit unicode_value two three with group=main_user.username prefix=pre %}
+
+<hr/>
+
+{% renderit custom_class two three with group=four prefix=pre concat=__ %}
+
+<hr/>
+
+{% renderit one two with group=three as myvar %}
+
+<hr/>
+<hr/>
+<h1>Generic Content Type Exampl</h1>
+
+<h2>{{ entry.title }}</h2>
+<h4>By {{ entry.author }} on {{ entry.publish_date }}
+<hr/>
+{{ entry.body }}
+
+<h4> Related Material</h4>
+{% for obj in related_content %}
+    {% renderit obj.content_object %}
+{% endfor %}
+
