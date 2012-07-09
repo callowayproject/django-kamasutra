@@ -1,7 +1,14 @@
+|BUILD|_
+
+.. |BUILD| image::
+   https://secure.travis-ci.org/callowayproject/django-kamasutra.png?branch=master
+.. _BUILD: http://travis-ci.org/#!/callowayproject/django-kamasutra
+
+
 Backwards incompatible changes made in version 0.2.2
 ====================================================
 
-**COMBINE_STRING** is now used to build the template list when using 
+**COMBINE_STRING** is now used to build the template list when using
 ``PositionContent.render`` or ``render_content`` template tag.
 
 Before:
@@ -19,7 +26,7 @@ Installation
 Using PIP::
 
 	pip install django-kamasutra
-	
+
 or download the app `here <http://pypi.python.org/pypi/django-kamasutra/>`_ ::
 
 	python setup.py install
@@ -32,7 +39,7 @@ Add **positions** to your settings **INSTALLED_APPS**::
         'positions',
         ...
     )
-    
+
 Add **positions** to your URLS::
 
     import positions.urls
@@ -57,10 +64,10 @@ The minimum required arguments to create a positions is a `name`, which is a `Sl
 ::
 
     from positions.models import Position
-    
+
     position = Position.objects.create(name="MyPosition")
-    
-    
+
+
 Add something to your Position
 ------------------------------
 
@@ -70,20 +77,20 @@ The position manager has a `add_object` method that takes, at minimum, 2 argumen
 * **obj** can be any model instance
 
 ::
-    
+
     from myapp.models import MyApp
-    
+
     obj = MyApp.objects.get_latest()
 
     Position.objects.add_object(position=position, obj=obj)
-    
-    
+
+
 .. note::
 
-    The `Position` model can define which types of objects that can be added. 
-    Therefore when adding objects to a position, make sure the content types 
+    The `Position` model can define which types of objects that can be added.
+    Therefore when adding objects to a position, make sure the content types
     is allowed by the `Position` instance.
-    
+
 Retrieve your position content
 ------------------------------
 
@@ -94,36 +101,36 @@ The position manager has a `get_content` method that takes at least 1 argument, 
 ::
 
     position = Position.objects.get(name="MyPosition")
-    
+
     content = Position.objects.get_content(position=position)
-    
-    
+
+
 Retrieve your position content via templatetag
 ----------------------------------------------
 
 ::
 
     {% get_position_content position as content %}
-    
+
 `get_position_content` expects [position] [as] [varname]
 
 * **position** can be a positions.Position instance or a name of a position
 
 
 ::
-    
+
     Position {{ position }} has the following content:<br/>
     <ul>
     {% for obj in content %}
         <li>{{ obj }}</li>
     {% endfor %}
     </ul>
-    
+
 .. note::
 
     By default the object instance will be returned, although returning the positions.PositionContent instance, which holds the generic relation between position and the object, is also possible
-    
+
     ::
-    
+
         {% get_position_content position as content as_content_type=False %}
-        
+
