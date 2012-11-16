@@ -271,7 +271,7 @@ class PositionContent(models.Model):
     position = models.ForeignKey(Position, verbose_name=_('Position'),
         help_text=_('The position where this object will be shown.'))
     content_type = models.ForeignKey(ContentType,
-        verbose_name=_('Content Type.'),
+        verbose_name=_('Content Type'),
         help_text=_('Type of this object.'))
     object_id = models.CharField(_('Object ID'), max_length=255,
         help_text=_('The ID/PK of the object.'))

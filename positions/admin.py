@@ -4,16 +4,22 @@ from django.core.urlresolvers import reverse
 from positions import settings
 from positions.models import Position, PositionContent
 
+
+class PositionContentInline(admin.TabularInline):
+    """Position content inline to manage the content"""
+    model = PositionContent
+    extra = 0
+    max_num = 0
+    readonly_fields = ('content_object', 'content_type', 'add_date', )
+    fields = ('content_object', 'content_type', 'add_date', 'order', )
+    ordering = ('order', )
+
+
 class PositionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'count', 
-        'allow_all_types', 'change_content_order')
+    list_display = ('name', 'description', 'count', 'allow_all_types', )
     search_fields = ('name', 'description')
     filter_horizontal = ('eligible_types',)
-
-    def change_content_order(self, obj):
-        return '<a href="%s">Change Order</a>' % reverse('positions_ordercontent', args=(str(obj.pk),))
-    change_content_order.short_description = ''
-    change_content_order.allow_tags = True
+    inlines = [PositionContentInline]
 
 
 class PositionContentAdmin(admin.ModelAdmin):
