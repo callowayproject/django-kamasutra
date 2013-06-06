@@ -32,12 +32,12 @@ class PositionAdmin(admin.ModelAdmin):
         items = []
         eligible_types = obj.eligible_types.all()
         for content_type in eligible_types[:5]:
-            items.append('<li>{}.{}</li>'.format(content_type.app_label, content_type.model))
+            items.append(u'<li>{}.{}</li>'.format(content_type.app_label, content_type.model))
 
         if eligible_types.count() > 5:
-            items.append('<br/>and {} more'.format(eligible_types.count() - 5))
+            items.append(u'<br/>and {} more'.format(eligible_types.count() - 5))
 
-        return '<ul>{}</ul>'.format(''.join(items))
+        return u'<ul>{}</ul>'.format(u''.join(items))
     list_eligible_types.allow_tags = True
     list_eligible_types.short_description = 'Eligible Types'
 
@@ -57,23 +57,23 @@ class PositionAdmin(admin.ModelAdmin):
         for i, pobj in enumerate(position_contents[:5]):
             item = unicode(pobj.content_object)
             try:
-                reverse_name = 'admin:{}_{}_change'.format(
+                reverse_name = u'admin:{}_{}_change'.format(
                     pobj.content_type.app_label,
                     pobj.content_type.model)
                 item_link = reverse(reverse_name, args=[pobj.content_object.id])
-                item = '<a href="{}">{}</a>'.format(
+                item = u'<a href="{}">{}</a>'.format(
                     item_link, unicode(pobj.content_object))
             except (NoReverseMatch, ):
                 pass
-            items.append('<li>{}</li>'.format(item))
+            items.append(u'<li>{}</li>'.format(item))
             if i+1 == obj.count:
-                items.append('<hr style="background-color:#a2a2a2;"/>')
+                items.append(u'<hr style="background-color:#a2a2a2;"/>')
 
         if position_contents.count() > 5:
-            items.append('<br/> and {} more'.format(
+            items.append(u'<br/> and {} more'.format(
                 position_contents.count() - 5))
 
-        return '<ul>{}</ul>'.format(''.join(items))
+        return u'<ul>{}</ul>'.format(''.join(items))
     current_items.allow_tags = True
 
 
