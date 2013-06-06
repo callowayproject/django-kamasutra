@@ -6,10 +6,10 @@
         <script type="text/javascript">
             $(function() {
                 $("#selector").autocomplete({
-                    source: "{% url positions_jsondata content_type_id object_id %}",
+                    source: "{% url 'positions_jsondata' content_type_id object_id %}",
     		        minLength: 2,
     		        select: function(event, ui) {
-    		            $.get("{% url positions_index %}add/"+ ui.item.value +"/{{ content_type_id }}/{{ object_id }}/",function(){
+    		            $.get("{% url 'positions_index' %}add/"+ ui.item.value +"/{{ content_type_id }}/{{ object_id }}/",function(){
 					        $('<li><span class="deletelink" id=pos_"'+ui.item.value+'">&nbsp;</span>'+ui.item.value+'</li>').appendTo("#position-admin-widget-items");
 					        $("#position-admin-widget-items li .deletelink").bind('click',function(){
 						        $.get($(this).attr('rel'));
@@ -36,7 +36,7 @@
     		        if(answer){
     		    	    var id = $(this).attr('id');
     			        var pos = id.replace('pos_','');
-    			        $.get('{% url positions_index %}remove/'+pos+'/{{ content_type_id }}/{{ object_id }}/');
+    			        $.get('{% url 'positions_index' %}remove/'+pos+'/{{ content_type_id }}/{{ object_id }}/');
     			        $(this).parent().fadeOut("250").remove();
     		        }
     		    });
