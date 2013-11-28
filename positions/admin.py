@@ -46,7 +46,7 @@ class PositionAdmin(admin.ModelAdmin):
 
         Each item will be wrapped in a admin change form link if the item
         is editable via the admin. This list also only shows the first 5
-        items in order not to cluter up the admin change list.
+        items in order not to clutter up the admin change list.
 
         A horizontal rule is placed between returned objects and
         overlap objects.
@@ -63,7 +63,7 @@ class PositionAdmin(admin.ModelAdmin):
                 item_link = reverse(reverse_name, args=[pobj.content_object.id])
                 item = u'<a href="{}">{}</a>'.format(
                     item_link, unicode(pobj.content_object))
-            except (NoReverseMatch, ):
+            except (NoReverseMatch, AttributeError):
                 pass
             items.append(u'<li>{}</li>'.format(item))
             if i+1 == obj.count:

@@ -111,10 +111,13 @@ class PositionManager(models.Manager):
 
             # Loop all the items, which is in the correct order we expect,
             # and retreive the item from our temp dictionary
-            items = [tmp_dict[ctype_key % (
-                i.content_type.app_label,
-                i.content_type.model,
-                str(i.object_id))] for i in items]
+            try:
+                items = [tmp_dict[ctype_key % (
+                    i.content_type.app_label,
+                    i.content_type.model,
+                    str(i.object_id))] for i in items]
+            except KeyError:
+                return []
 
         num = count or pos.count
         return items[:num]
