@@ -2,7 +2,8 @@
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-import os, sys
+import os
+import sys
 APP = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 PROJ_ROOT = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(APP)
@@ -12,13 +13,6 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-
-DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'dev.db'             # Or path to database file if using sqlite3.
-DATABASE_USER = ''             # Not used with sqlite3.
-DATABASE_PASSWORD = ''         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 DATABASES = {
     'default': {
@@ -65,7 +59,6 @@ SECRET_KEY = 'g2_39yupn*6j4p*cg2%w643jiq-1n_annua*%i8+rq0dx9p=$n'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.load_template_source',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -74,7 +67,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 
-ROOT_URLCONF = 'example.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     os.path.abspath(os.path.join('templates')),
@@ -92,3 +85,5 @@ INSTALLED_APPS = (
     'positions',
     'sample_app',
 )
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'

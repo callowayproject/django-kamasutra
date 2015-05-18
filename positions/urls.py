@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import url, patterns
 
 urlpatterns = patterns('positions.views',
     url(regex=r'^add/(?P<position_name>[\w_-]+)/(?P<type>[\d]+)/(?P<id>[\d]+)/$',
